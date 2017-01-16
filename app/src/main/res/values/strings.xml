@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">干货</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">设置</string>
+
+    <string name="menuAll">All</string>
+    <string name="menuAndroid">Android</string>
+    <string name="menuIOS">iOS</string>
+    <string name="menuVideo">休息视频</string>
+    <string name="menuWelfare">福利</string>
+    <string name="menuRes">拓展资源</string>
+    <string name="menuFront">前端</string>
+    <string name="menuRec">瞎推荐</string>
+    <string name="menuApp">App</string>
+
+</resources>

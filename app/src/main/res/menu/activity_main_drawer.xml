@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/menuAll"
+        android:title="@string/menuAll"/>
+
+    <item
+        android:id="@+id/menuAndroid"
+        android:title="@string/menuAndroid"/>
+
+    <item
+        android:id="@+id/menuIOS"
+        android:title="@string/menuIOS"/>
+
+    <item
+        android:id="@+id/menuVideo"
+        android:title="@string/menuVideo"/>
+
+    <item
+        android:id="@+id/menuWelfare"
+        android:title="@string/menuWelfare"/>
+
+    <item
+        android:id="@+id/menuRes"
+        android:title="@string/menuRes"/>
+
+    <item
+        android:id="@+id/menuFront"
+        android:title="@string/menuFront"/>
+
+    <item
+        android:id="@+id/menuRec"
+        android:title="@string/menuRec"/>
+
+    <item
+        android:id="@+id/menuApp"
+        android:title="@string/menuApp"/>
+
+</menu>
