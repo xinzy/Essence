@@ -1,34 +1,53 @@
 package com.xinzy.essence.activity;
 
+import android.Manifest;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 
+import com.squareup.picasso.Picasso;
 import com.xinzy.essence.R;
+import com.xinzy.essence.adapter.BeautyAdapter;
 import com.xinzy.essence.base.BaseActivity;
+import com.xinzy.essence.model.Essence;
 import com.xinzy.essence.presenter.MainPresenter;
 import com.xinzy.essence.presenter.impl.MainPresenterImpl;
+import com.xinzy.essence.util.L;
+import com.xinzy.essence.util.Macro;
 import com.xinzy.essence.view.MainView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener,
-        SwipeRefreshLayout.OnRefreshListener, MainView
+        SwipeRefreshLayout.OnRefreshListener, MainView, MainView.OnItemClickListener
 {
-    private static final String DEFAULT_CATEGORY = "福利";
+    private static final String TAG = MainActivity.class.getSimpleName();
+    private static final String DEFAULT_CATEGORY = Macro.EXT_CATEGORY[0];
+    private static final int REQUEST_CODE_WRITE_EXTERNAL_STORAGE = 627;
+
+    private static final int MENU_FIRST = View.generateViewId();
 
     private SwipeRefreshLayout mRefreshLayout;
     private RecyclerView mRecycleView;
+    private BeautyAdapter mAdapter;
     private MainPresenter mPresenter;
 
     @Override
@@ -39,13 +58,14 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
             {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                mRecycleView.smoothScrollToPosition(0);
+                mPresenter.start();
             }
         });
 
@@ -56,6 +76,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        for (int i = 0; i < Macro.CATEGORYS.length; i++)
+        {
+            navigationView.getMenu().add(0, MENU_FIRST + i, 0, Macro.CATEGORYS[i]);
+        }
 
         mRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
         mRefreshLayout.setOnRefreshListener(this);
@@ -63,9 +87,41 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         mRecycleView.setHasFixedSize(true);
         StaggeredGridLayoutManager manager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         mRecycleView.setLayoutManager(manager);
+        mRecycleView.addOnScrollListener(new RecyclerView.OnScrollListener()
+        {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState)
+            {
+                if (newState == RecyclerView.SCROLL_STATE_IDLE || newState == RecyclerView.SCROLL_STATE_DRAGGING)
+                {
+                    Picasso.with(MainActivity.this).resumeTag(TAG);
+                } else
+                {
+                    Picasso.with(MainActivity.this).pauseTag(TAG);
+                }
+                if (newState == RecyclerView.SCROLL_STATE_IDLE)
+                {
+                    if (recyclerView.canScrollVertically(-1))
+                    {
+                        mPresenter.loading(false);
+                    }
+                }
+            }
+        });
+        mAdapter = new BeautyAdapter(new ArrayList<Essence>());
+        mAdapter.setTag(TAG);
+        mAdapter.setOnItemClickListener(this);
+        mRecycleView.setAdapter(mAdapter);
 
         mPresenter = new MainPresenterImpl(this, DEFAULT_CATEGORY);
-        mPresenter.start();
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
+        {
+            L.v("has write external storage permission");
+            mPresenter.start();
+        } else
+        {
+            requestPermission();
+        }
     }
 
     @Override
@@ -82,56 +138,45 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu)
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)
     {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_CODE_WRITE_EXTERNAL_STORAGE)
+        {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
+            {
+                mPresenter.start();
+            } else
+            {
+                remindPermission();
+            }
+        }
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item)
+    private void requestPermission()
     {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE_WRITE_EXTERNAL_STORAGE);
+    }
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings)
+    private void remindPermission()
+    {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE))
         {
-            return true;
+            new AlertDialog.Builder(this).setMessage(R.string.remindWriteExternalStorage).setPositiveButton(R.string.ok, new DialogInterface.OnClickListener()
+            {
+                @Override
+                public void onClick(DialogInterface dialog, int which)
+                {
+                    requestPermission();
+                }
+            }).setNegativeButton(R.string.cancel, null).show();
         }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item)
     {
         int id = item.getItemId();
-
-        switch (id)
-        {
-        case R.id.menuAll:
-            break;
-        case R.id.menuAndroid:
-            break;
-        case R.id.menuIOS:
-            break;
-        case R.id.menuVideo:
-            break;
-        case R.id.menuWelfare:
-            break;
-        case R.id.menuRes:
-            break;
-        case R.id.menuFront:
-            break;
-        case R.id.menuRec:
-            break;
-        case R.id.menuApp:
-            break;
-        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -152,12 +197,44 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @Override
     public void showRefresh()
     {
-        mRefreshLayout.setRefreshing(true);
+        if (! mRefreshLayout.isRefreshing())
+        {
+            mRefreshLayout.setRefreshing(true);
+        }
     }
 
     @Override
     public void closeRefresh()
     {
-        mRefreshLayout.setRefreshing(false);
+        if (mRefreshLayout.isRefreshing())
+        {
+            mRefreshLayout.setRefreshing(false);
+        }
+    }
+
+    @Override
+    public void setData(List<Essence> data, boolean refresh)
+    {
+        if (refresh)
+        {
+            mAdapter.replace(data);
+        } else
+        {
+            mAdapter.addAll(data);
+        }
+    }
+
+    @Override
+    public void onImageClick(ImageView img, Essence essence)
+    {
+        Intent intent = new Intent(this, ImageActivity.class);
+        intent.putExtra("transition", "share");
+        intent.putExtra(ImageActivity.KEY_ESSENCE, essence);
+        startActivity(intent, ActivityOptionsCompat.makeSceneTransitionAnimation(this, img, getString(R.string.imageTransitionName)).toBundle());
+    }
+
+    @Override
+    public void onTextClick(Essence essence)
+    {
     }
 }

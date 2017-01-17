@@ -1,7 +1,5 @@
 package com.xinzy.essence.presenter;
 
-import android.support.annotation.Nullable;
-
 import com.xinzy.essence.base.BasePresenter;
 
 /**
@@ -10,5 +8,5 @@ import com.xinzy.essence.base.BasePresenter;
 
 public interface MainPresenter extends BasePresenter
 {
-    void loading(@Nullable String category, boolean refresh);
+    void loading(boolean refresh);
 }

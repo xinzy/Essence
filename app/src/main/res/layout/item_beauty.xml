@@ -1,36 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView
+
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:foreground="?android:attr/selectableItemBackground"
-    app:cardCornerRadius="6dp"
-    app:cardElevation="8dp">
+    android:background="@drawable/bg_card"
+    android:orientation="vertical">
 
-    <LinearLayout
+    <ImageView
+        android:id="@+id/itemImg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:adjustViewBounds="true"
+        android:contentDescription="@null"
+        android:transitionName="@string/imageTransitionName"
+        tools:src="@drawable/ic_menu_gallery"/>
 
-        <ImageView
-            android:id="@+id/itemImg"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:src="@drawable/ic_menu_gallery"
-            android:adjustViewBounds="true"
-            android:contentDescription="@null"/>
-
-        <TextView
-            android:id="@+id/itemTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            tools:text="测试文字啦啦啦啦"
-            android:textSize="14sp"
-            android:textColor="#666"
-            android:padding="16dp"/>
-    </LinearLayout>
-
-</android.support.v7.widget.CardView>
+    <TextView
+        android:id="@+id/itemTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="8dp"
+        android:textColor="#666"
+        android:textSize="14sp"
+        tools:text="测试文字啦啦啦啦"/>
+</LinearLayout>

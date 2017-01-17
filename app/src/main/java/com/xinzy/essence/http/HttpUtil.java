@@ -2,7 +2,12 @@ package com.xinzy.essence.http;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.xinzy.essence.util.FileUtil;
+import com.xinzy.essence.util.Macro;
 
+import java.io.File;
+
+import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
@@ -12,14 +17,13 @@ import retrofit2.converter.gson.GsonConverterFactory;
 /**
  * Created by xinzy on 17/1/16.
  */
-
 public class HttpUtil
 {
     private static OkHttpClient mOkHttpClient;
     private static Retrofit mRetrofit;
     private static Retrofit mRxRetrofit;
 
-    public static OkHttpClient getClientInstance()
+    private static OkHttpClient getClientInstance()
     {
         if (mOkHttpClient == null)
         {
@@ -35,6 +39,10 @@ public class HttpUtil
         return mOkHttpClient;
     }
 
+    public static OkHttpClient getPicassoClient()
+    {
+        return new OkHttpClient.Builder().cache(new Cache(new File(FileUtil.getCacheRootDirection(), "picasso"), Macro.IMAGE_CACHE_SIZE)).build();
+    }
 
     public static Retrofit getRetrofitInstance()
     {
@@ -73,4 +81,5 @@ public class HttpUtil
 
         return mRxRetrofit;
     }
+
 }

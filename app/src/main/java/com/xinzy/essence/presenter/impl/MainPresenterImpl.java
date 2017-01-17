@@ -1,7 +1,6 @@
 package com.xinzy.essence.presenter.impl;
 
 import android.support.annotation.NonNull;
-import android.text.TextUtils;
 
 import com.xinzy.essence.api.retrofit.ListService;
 import com.xinzy.essence.http.HttpUtil;
@@ -30,6 +29,7 @@ public class MainPresenterImpl implements MainPresenter
     private String mCategory;
 
     private int page = 1;
+    private boolean isLoading;
 
     public MainPresenterImpl(@NonNull MainView view, @NonNull String category)
     {
@@ -38,12 +38,10 @@ public class MainPresenterImpl implements MainPresenter
     }
 
     @Override
-    public void loading(String category, final boolean refresh)
+    public void loading(boolean refresh)
     {
-        if (!TextUtils.isEmpty(category) && ! category.equals(mCategory))
-        {
-            mCategory = category;
-        }
+        if (isLoading) return;
+        isLoading = true;
 
         if (refresh)
         {
@@ -51,7 +49,7 @@ public class MainPresenterImpl implements MainPresenter
             page = 1;
         }
 
-        L.v("start loading");
+        L.v("start loading page = " + page);
         Retrofit retrofit = HttpUtil.getRetrofitInstance();
         ListService listService = retrofit.create(ListService.class);
         listService.category(mCategory, PER_PAGE, page).enqueue(new Callback<ListSimple<Essence>>() {
@@ -59,7 +57,10 @@ public class MainPresenterImpl implements MainPresenter
             public void onResponse(Call<ListSimple<Essence>> call, Response<ListSimple<Essence>> response)
             {
                 L.d("result " + response.body());
+                mMainView.setData(response.body().getResults(), page == 1);
                 mMainView.closeRefresh();
+                page ++;
+                isLoading = false;
             }
 
             @Override
@@ -67,14 +68,14 @@ public class MainPresenterImpl implements MainPresenter
             {
                 L.e("load error", t);
                 mMainView.closeRefresh();
+                isLoading = false;
             }
         });
-
     }
 
     @Override
     public void start()
     {
-        loading(mCategory, true);
+        loading(true);
     }
 }

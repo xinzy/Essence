@@ -1,5 +1,8 @@
 package com.xinzy.essence.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.util.Date;
@@ -7,18 +10,23 @@ import java.util.Date;
 /**
  * Created by xinzy on 17/1/16.
  */
-public class Essence
+public class Essence implements Parcelable
 {
     @SerializedName("_id")
     private String id;
     private Date createdAt;
     private Date publishedAt;
-    private String desc;
+    @SerializedName("desc")
+    private String content;
     private String source;
     private String type;
     private String url;
     private boolean used;
     private String who;
+
+    public Essence()
+    {
+    }
 
     public String getId()
     {
@@ -50,14 +58,14 @@ public class Essence
         this.publishedAt = publishedAt;
     }
 
-    public String getDesc()
+    public String getContent()
     {
-        return desc;
+        return content;
     }
 
-    public void setDesc(String desc)
+    public void setContent(String content)
     {
-        this.desc = desc;
+        this.content = content;
     }
 
     public String getSource()
@@ -117,7 +125,7 @@ public class Essence
                 "id='" + id + '\'' +
                 ", createdAt=" + createdAt +
                 ", publishedAt=" + publishedAt +
-                ", desc='" + desc + '\'' +
+                ", content='" + content + '\'' +
                 ", source='" + source + '\'' +
                 ", type='" + type + '\'' +
                 ", url='" + url + '\'' +
@@ -125,4 +133,54 @@ public class Essence
                 ", who='" + who + '\'' +
                 '}';
     }
+
+    @Override
+    public int describeContents()
+    {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags)
+    {
+        dest.writeString(this.id);
+        dest.writeLong(this.createdAt != null ? this.createdAt.getTime() : -1);
+        dest.writeLong(this.publishedAt != null ? this.publishedAt.getTime() : -1);
+        dest.writeString(this.content);
+        dest.writeString(this.source);
+        dest.writeString(this.type);
+        dest.writeString(this.url);
+        dest.writeByte(this.used ? (byte) 1 : (byte) 0);
+        dest.writeString(this.who);
+    }
+
+    protected Essence(Parcel in)
+    {
+        this.id = in.readString();
+        long tmpCreatedAt = in.readLong();
+        this.createdAt = tmpCreatedAt == -1 ? null : new Date(tmpCreatedAt);
+        long tmpPublishedAt = in.readLong();
+        this.publishedAt = tmpPublishedAt == -1 ? null : new Date(tmpPublishedAt);
+        this.content = in.readString();
+        this.source = in.readString();
+        this.type = in.readString();
+        this.url = in.readString();
+        this.used = in.readByte() != 0;
+        this.who = in.readString();
+    }
+
+    public static final Creator<Essence> CREATOR = new Creator<Essence>()
+    {
+        @Override
+        public Essence createFromParcel(Parcel source)
+        {
+            return new Essence(source);
+        }
+
+        @Override
+        public Essence[] newArray(int size)
+        {
+            return new Essence[size];
+        }
+    };
 }
