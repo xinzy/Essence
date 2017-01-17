@@ -21,6 +21,16 @@ public class Macro
     public static final int IMAGE_CACHE_SIZE = 1024 * 1024 * 100;
 
     /**
+     * 网络请求缓存
+     */
+    public static final int HTTP_CACHE_SIZE = 1024 * 1024 * 10;
+
+    /**
+     * 网络请求缓存有效期
+     */
+    public static final int HTTP_CACHE_CONTROL_MAX_AGE = 60 * 30;
+
+    /**
      * 支持分类
      */
     public static final String[] CATEGORYS = {"all", "Android", "iOS", "拓展资源", "前端", "瞎推荐", "App"};

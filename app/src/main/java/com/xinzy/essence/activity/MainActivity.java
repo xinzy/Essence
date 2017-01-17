@@ -177,6 +177,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     public boolean onNavigationItemSelected(MenuItem item)
     {
         int id = item.getItemId();
+        CategoryActivity.start(this, Macro.CATEGORYS[id - MENU_FIRST]);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -204,7 +205,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     @Override
-    public void closeRefresh()
+    public void hideRefresh()
     {
         if (mRefreshLayout.isRefreshing())
         {

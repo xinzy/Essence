@@ -11,5 +11,7 @@
     <string name="cancel">取消</string>
 
     <string name="imageTransitionName">shareTransition</string>
+    <string name="title_activity_category">CategoryActivity</string>
+    <string name="section_format">Hello World from section: %1$d</string>
 
 </resources>

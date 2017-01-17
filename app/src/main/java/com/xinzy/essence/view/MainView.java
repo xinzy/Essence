@@ -16,7 +16,7 @@ public interface MainView extends BaseView<MainPresenter>
 {
     void showRefresh();
 
-    void closeRefresh();
+    void hideRefresh();
 
     void setData(List<Essence> data, boolean refresh);
 
