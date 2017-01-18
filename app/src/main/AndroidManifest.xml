@@ -24,13 +24,16 @@
         </activity>
         <activity
             android:name=".activity.ImageActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:label="@string/titleActivityImage"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".activity.CategoryActivity"
-            android:label="@string/title_activity_category"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:label="@string/titleActivityCategory"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".activity.WebViewActivity"
+            android:label="@string/titleActivityWebView"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

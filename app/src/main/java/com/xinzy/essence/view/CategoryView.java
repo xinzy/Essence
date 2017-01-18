@@ -17,4 +17,9 @@ public interface CategoryView extends BaseView<CategoryPresenter>
     void hideRefresh();
 
     void setData(List<Essence> data, boolean refresh);
+
+    interface OnItemClickListener
+    {
+        void onItemClick(Essence essence);
+    }
 }

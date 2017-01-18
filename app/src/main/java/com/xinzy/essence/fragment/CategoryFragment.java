@@ -12,11 +12,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.xinzy.essence.R;
+import com.xinzy.essence.activity.WebViewActivity;
 import com.xinzy.essence.adapter.CategoryAdapter;
 import com.xinzy.essence.base.BaseFragment;
 import com.xinzy.essence.model.Essence;
 import com.xinzy.essence.presenter.CategoryPresenter;
 import com.xinzy.essence.presenter.impl.CategoryPresenterImpl;
+import com.xinzy.essence.util.L;
 import com.xinzy.essence.view.CategoryView;
 
 import java.util.ArrayList;
@@ -27,7 +29,7 @@ import static android.provider.MediaStore.Video.VideoColumns.CATEGORY;
 /**
  * Created by xinzy on 17/1/17.
  */
-public class CategoryFragment extends BaseFragment implements CategoryView, SwipeRefreshLayout.OnRefreshListener
+public class CategoryFragment extends BaseFragment implements CategoryView, SwipeRefreshLayout.OnRefreshListener, CategoryView.OnItemClickListener
 {
     private static final String ARG_CATEGORY = "CATEGORY";
 
@@ -71,7 +73,30 @@ public class CategoryFragment extends BaseFragment implements CategoryView, Swip
         RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.categoryRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         recyclerView.setHasFixedSize(false);
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener()
+        {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState)
+            {
+                if (newState == RecyclerView.SCROLL_STATE_IDLE)
+                {
+                    final int childrenCount = recyclerView.getLayoutManager().getChildCount();
+                    if (childrenCount > 0)
+                    {
+                        final View lastChildView = recyclerView.getLayoutManager().getChildAt(childrenCount - 1);
+                        final int lastChildBottom = lastChildView.getBottom();
+                        final int recyclerBottom = recyclerView.getBottom() - recyclerView.getPaddingBottom();
+                        final int lastPosition = recyclerView.getLayoutManager().getPosition(lastChildView);
+                        if (lastChildBottom >= recyclerBottom - 1 && lastPosition == recyclerView.getLayoutManager().getItemCount() - 1)
+                        {
+                            mPresenter.loading(false);
+                        }
+                    }
+                }
+            }
+        });
         mCategoryAdapter = new CategoryAdapter(new ArrayList<Essence>());
+        mCategoryAdapter.setOnItemClickListener(this);
         recyclerView.setAdapter(mCategoryAdapter);
         return rootView;
     }
@@ -113,6 +138,13 @@ public class CategoryFragment extends BaseFragment implements CategoryView, Swip
     public void onRefresh()
     {
         mPresenter.loading(true);
+    }
+
+    @Override
+    public void onItemClick(Essence essence)
+    {
+        L.v("on item click " + essence);
+        WebViewActivity.start(getContext(), essence.getUrl());
     }
 
     @Override

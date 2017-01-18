@@ -13,7 +13,7 @@ public class Macro
     /**
      * 单页请求数
      */
-    public static final int PER_PAGE = 10;
+    public static final int PER_PAGE = 15;
 
     /**
      * 图片缓存大小

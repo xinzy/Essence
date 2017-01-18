@@ -15,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.xinzy.essence.R;
 import com.xinzy.essence.fragment.CategoryFragment;
@@ -93,7 +94,7 @@ public class CategoryActivity extends AppCompatActivity
     public class SectionsPagerAdapter extends FragmentPagerAdapter
     {
 
-        public SectionsPagerAdapter(FragmentManager fm)
+        SectionsPagerAdapter(FragmentManager fm)
         {
             super(fm);
         }
@@ -114,6 +115,11 @@ public class CategoryActivity extends AppCompatActivity
         public CharSequence getPageTitle(int position)
         {
             return Macro.CATEGORYS[position];
+        }
+
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object)
+        {
         }
     }
 }

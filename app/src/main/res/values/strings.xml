@@ -6,12 +6,12 @@
     <string name="action_settings">设置</string>
 
     <string name="slideInfo">一个自学习的App</string>
+    <string name="titleActivityImage">美图</string>
+    <string name="titleActivityCategory">分类</string>
+    <string name="titleActivityWebView">浏览</string>
+
     <string name="remindWriteExternalStorage">为了您App的流畅性，请开启读写存储卡的权限</string>
     <string name="ok">确定</string>
     <string name="cancel">取消</string>
-
     <string name="imageTransitionName">shareTransition</string>
-    <string name="title_activity_category">CategoryActivity</string>
-    <string name="section_format">Hello World from section: %1$d</string>
-
 </resources>

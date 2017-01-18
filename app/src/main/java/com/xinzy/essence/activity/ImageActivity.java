@@ -36,7 +36,6 @@ public class ImageActivity extends AppCompatActivity
         if (actionBar != null)
         {
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle(mEssence.getContent());
         }
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);

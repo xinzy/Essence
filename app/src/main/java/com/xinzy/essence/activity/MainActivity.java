@@ -101,9 +101,17 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 }
                 if (newState == RecyclerView.SCROLL_STATE_IDLE)
                 {
-                    if (recyclerView.canScrollVertically(-1))
+                    final int childrenCount = recyclerView.getLayoutManager().getChildCount();
+                    if (childrenCount > 0)
                     {
-                        mPresenter.loading(false);
+                        final View lastChildView = recyclerView.getLayoutManager().getChildAt(childrenCount - 1);
+                        final int lastChildBottom = lastChildView.getBottom();
+                        final int recyclerBottom = recyclerView.getBottom() - recyclerView.getPaddingBottom();
+                        final int lastPosition = recyclerView.getLayoutManager().getPosition(lastChildView);
+                        if (lastChildBottom >= recyclerBottom - 1 && lastPosition == recyclerView.getLayoutManager().getItemCount() - 1)
+                        {
+                            mPresenter.loading(false);
+                        }
                     }
                 }
             }
