@@ -2,68 +2,65 @@ package com.xinzy.essence.presenter.impl;
 
 import android.support.annotation.NonNull;
 
-import com.xinzy.essence.api.retrofit.ListService;
-import com.xinzy.essence.http.HttpUtil;
+import com.xinzy.essence.api.ApiCallback;
+import com.xinzy.essence.api.ListServiceApi;
+import com.xinzy.essence.api.impl.ListServiceApiRetrofitImpl;
 import com.xinzy.essence.model.Essence;
-import com.xinzy.essence.model.ListSimple;
 import com.xinzy.essence.presenter.CategoryPresenter;
-import com.xinzy.essence.util.L;
-import com.xinzy.essence.util.Macro;
+import com.xinzy.essence.util.EssenceException;
 import com.xinzy.essence.util.Preconditions;
 import com.xinzy.essence.view.CategoryView;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
+import java.util.List;
+
+import static com.xinzy.essence.util.Macro.PER_PAGE;
 
 /**
  * Created by xinzy on 17/1/17.
  */
-
 public class CategoryPresenterImpl implements CategoryPresenter
 {
     private CategoryView mView;
 
-    private String mCategory;
+    private String                        mCategory;
+    private ListServiceApi<List<Essence>> mServiceApi;
+
     private int mPage = 1;
     private boolean isLoading;
 
     public CategoryPresenterImpl(@NonNull CategoryView view, String category)
     {
         mView = Preconditions.checkNull(view);
-        mCategory = category;
+        mCategory = Preconditions.checkNull(category);
+        mServiceApi = new ListServiceApiRetrofitImpl(mCategory);
     }
 
     @Override
-    public void loading(boolean refresh)
+    public void loading(final boolean refresh)
     {
         if (isLoading) return;
         isLoading = true;
-        if (refresh)
-        {
-            mPage = 1;
-            mView.showRefresh();
-        }
+        if (refresh) mPage = 1;
 
-        Retrofit                  retrofit = HttpUtil.getRetrofitInstance();
-        ListService               service  = retrofit.create(ListService.class);
-        Call<ListSimple<Essence>> call     = service.category(mCategory, Macro.PER_PAGE, mPage);
-        call.enqueue(new Callback<ListSimple<Essence>>() {
+        mServiceApi.category(PER_PAGE, mPage, new ApiCallback<List<Essence>>() {
             @Override
-            public void onResponse(Call<ListSimple<Essence>> call, Response<ListSimple<Essence>> response)
+            public void onStart()
             {
-                L.d("load success " + response.body());
+                if (refresh) mView.showRefresh();
+            }
+
+            @Override
+            public void onSuccess(List<Essence> essences)
+            {
+                mView.setData(essences, refresh);
                 mView.hideRefresh();
-                mView.setData(response.body().getResults(), mPage == 1);
                 mPage ++;
                 isLoading = false;
             }
 
             @Override
-            public void onFailure(Call<ListSimple<Essence>> call, Throwable t)
+            public void onFailure(EssenceException e)
             {
-                L.e("loading error", t);
                 mView.hideRefresh();
                 isLoading = false;
             }
