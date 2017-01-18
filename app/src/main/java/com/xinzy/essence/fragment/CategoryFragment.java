@@ -20,6 +20,7 @@ import com.xinzy.essence.presenter.CategoryPresenter;
 import com.xinzy.essence.presenter.impl.CategoryPresenterImpl;
 import com.xinzy.essence.util.L;
 import com.xinzy.essence.view.CategoryView;
+import com.xinzy.essence.widget.InternalRecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,28 +71,25 @@ public class CategoryFragment extends BaseFragment implements CategoryView, Swip
         View     rootView = inflater.inflate(R.layout.fragment_category, container, false);
         mRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.categoryRefreshLayout);
         mRefreshLayout.setOnRefreshListener(this);
-        RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.categoryRecyclerView);
+        InternalRecyclerView recyclerView = (InternalRecyclerView) rootView.findViewById(R.id.categoryRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         recyclerView.setHasFixedSize(false);
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener()
+        recyclerView.addItemDecoration(new InternalRecyclerView.LinearItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
+        recyclerView.addOnScrollListener(new InternalRecyclerView.InternalScrollListener()
         {
             @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState)
+            public void onScrollToTop(RecyclerView view, int state)
             {
-                if (newState == RecyclerView.SCROLL_STATE_IDLE)
+                L.d("onScrollToTop" + state);
+            }
+
+            @Override
+            public void onScrollToBottom(RecyclerView view, int state)
+            {
+                L.d("onScrollToBottom" + state);
+                if (state == RecyclerView.SCROLL_STATE_IDLE)
                 {
-                    final int childrenCount = recyclerView.getLayoutManager().getChildCount();
-                    if (childrenCount > 0)
-                    {
-                        final View lastChildView = recyclerView.getLayoutManager().getChildAt(childrenCount - 1);
-                        final int lastChildBottom = lastChildView.getBottom();
-                        final int recyclerBottom = recyclerView.getBottom() - recyclerView.getPaddingBottom();
-                        final int lastPosition = recyclerView.getLayoutManager().getPosition(lastChildView);
-                        if (lastChildBottom >= recyclerBottom - 1 && lastPosition == recyclerView.getLayoutManager().getItemCount() - 1)
-                        {
-                            mPresenter.loading(false);
-                        }
-                    }
+                    mPresenter.loading(false);
                 }
             }
         });

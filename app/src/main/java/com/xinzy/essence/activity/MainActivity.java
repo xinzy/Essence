@@ -32,6 +32,7 @@ import com.xinzy.essence.presenter.impl.MainPresenterImpl;
 import com.xinzy.essence.util.L;
 import com.xinzy.essence.util.Macro;
 import com.xinzy.essence.view.MainView;
+import com.xinzy.essence.widget.InternalRecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +47,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private static final int MENU_FIRST = View.generateViewId();
 
     private SwipeRefreshLayout mRefreshLayout;
-    private RecyclerView mRecycleView;
+    private InternalRecyclerView mRecycleView;
     private BeautyAdapter mAdapter;
     private MainPresenter mPresenter;
 
@@ -83,15 +84,16 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
         mRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
         mRefreshLayout.setOnRefreshListener(this);
-        mRecycleView = (RecyclerView) findViewById(R.id.recyclerView);
+        mRecycleView = (InternalRecyclerView) findViewById(R.id.recyclerView);
         mRecycleView.setHasFixedSize(true);
         StaggeredGridLayoutManager manager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         mRecycleView.setLayoutManager(manager);
-        mRecycleView.addOnScrollListener(new RecyclerView.OnScrollListener()
+        mRecycleView.addOnScrollListener(new InternalRecyclerView.InternalScrollListener()
         {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState)
             {
+                super.onScrollStateChanged(recyclerView, newState);
                 if (newState == RecyclerView.SCROLL_STATE_IDLE || newState == RecyclerView.SCROLL_STATE_DRAGGING)
                 {
                     Picasso.with(MainActivity.this).resumeTag(TAG);
@@ -99,20 +101,14 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 {
                     Picasso.with(MainActivity.this).pauseTag(TAG);
                 }
-                if (newState == RecyclerView.SCROLL_STATE_IDLE)
+            }
+
+            @Override
+            public void onScrollToBottom(RecyclerView view, int state)
+            {
+                if (state == RecyclerView.SCROLL_STATE_IDLE)
                 {
-                    final int childrenCount = recyclerView.getLayoutManager().getChildCount();
-                    if (childrenCount > 0)
-                    {
-                        final View lastChildView = recyclerView.getLayoutManager().getChildAt(childrenCount - 1);
-                        final int lastChildBottom = lastChildView.getBottom();
-                        final int recyclerBottom = recyclerView.getBottom() - recyclerView.getPaddingBottom();
-                        final int lastPosition = recyclerView.getLayoutManager().getPosition(lastChildView);
-                        if (lastChildBottom >= recyclerBottom - 1 && lastPosition == recyclerView.getLayoutManager().getItemCount() - 1)
-                        {
-                            mPresenter.loading(false);
-                        }
-                    }
+                    mPresenter.loading(false);
                 }
             }
         });

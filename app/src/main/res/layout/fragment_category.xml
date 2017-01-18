@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context="com.xinzy.essence.fragment.CategoryFragment">
 
-    <android.support.v7.widget.RecyclerView
+    <com.xinzy.essence.widget.InternalRecyclerView
         android:id="@+id/categoryRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
