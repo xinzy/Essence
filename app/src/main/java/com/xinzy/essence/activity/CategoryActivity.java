@@ -11,17 +11,17 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.xinzy.essence.R;
+import com.xinzy.essence.base.BaseActivity;
 import com.xinzy.essence.fragment.CategoryFragment;
 import com.xinzy.essence.util.Macro;
 
-public class CategoryActivity extends AppCompatActivity
+public class CategoryActivity extends BaseActivity
 {
     private static final String KEY_CATEGORY = "CATEGORY";
 

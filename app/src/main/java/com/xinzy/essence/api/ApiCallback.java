@@ -13,5 +13,4 @@ public interface ApiCallback<T>
     void onSuccess(T t);
 
     void onFailure(EssenceException e);
-
 }

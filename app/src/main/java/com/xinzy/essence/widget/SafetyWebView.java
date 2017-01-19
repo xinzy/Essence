@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
+import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 
@@ -45,6 +46,9 @@ public class SafetyWebView extends WebView
         settings.setUseWideViewPort(true);
         settings.setLoadWithOverviewMode(true);
         settings.setDomStorageEnabled(true);
+
+        setVerticalScrollBarEnabled(true);
+        setScrollBarStyle(View.SCROLLBARS_OUTSIDE_OVERLAY);
 
         removeJavascriptInterface("searchBoxJavaBridge_");
         removeJavascriptInterface("accessibility");

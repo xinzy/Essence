@@ -1,34 +1,46 @@
 package com.xinzy.essence.activity;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.squareup.picasso.Picasso;
 import com.xinzy.essence.R;
-import com.xinzy.essence.model.Essence;
+import com.xinzy.essence.base.BaseActivity;
 
 import uk.co.senab.photoview.PhotoView;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
-public class ImageActivity extends AppCompatActivity
+public class ImageActivity extends BaseActivity
 {
-    public static final String KEY_ESSENCE = "ESSENCE";
+    private static final String KEY_IMAGE = "IMAGE";
 
-    private Essence mEssence;
     private PhotoViewAttacher mAttacher;
+
+    public static void start(Activity activity, View view, String url)
+    {
+        Intent starter = new Intent(activity, ImageActivity.class);
+        starter.putExtra("transition", "share");
+        starter.putExtra(KEY_IMAGE, url);
+        String sharedElementName = activity.getString(R.string.imageTransitionName);
+        Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, view, sharedElementName).toBundle();
+        ActivityCompat.startActivity(activity, starter, bundle);
+    }
     
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image);
-        mEssence = getIntent().getParcelableExtra(KEY_ESSENCE);
+        String url = getIntent().getStringExtra(KEY_IMAGE);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -49,7 +61,7 @@ public class ImageActivity extends AppCompatActivity
         });
 
         PhotoView imageView = (PhotoView) findViewById(R.id.contentImage);
-        Picasso.with(this).load(mEssence.getUrl()).into(imageView);
+        Picasso.with(this).load(url).into(imageView);
         mAttacher = new PhotoViewAttacher(imageView);
         mAttacher.update();
     }

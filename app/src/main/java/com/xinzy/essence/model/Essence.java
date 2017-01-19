@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
+import com.xinzy.essence.util.Macro;
 
 import java.util.Date;
 
@@ -121,17 +122,21 @@ public class Essence implements Parcelable
     @Override
     public String toString()
     {
-        return "Essence{" +
-                "id='" + id + '\'' +
-                ", createdAt=" + createdAt +
-                ", publishedAt=" + publishedAt +
-                ", content='" + content + '\'' +
-                ", source='" + source + '\'' +
-                ", type='" + type + '\'' +
-                ", url='" + url + '\'' +
-                ", used=" + used +
-                ", who='" + who + '\'' +
-                '}';
+        if (Macro.DEBUG)
+        {
+            return "Essence{" +
+                    "id='" + id + '\'' +
+                    ", createdAt=" + createdAt +
+                    ", publishedAt=" + publishedAt +
+                    ", content='" + content + '\'' +
+                    ", source='" + source + '\'' +
+                    ", type='" + type + '\'' +
+                    ", url='" + url + '\'' +
+                    ", used=" + used +
+                    ", who='" + who + '\'' +
+                    '}';
+        }
+        return "";
     }
 
     @Override

@@ -1,11 +1,12 @@
 package com.xinzy.essence.model;
 
+import com.xinzy.essence.util.Macro;
+
 import java.util.List;
 
 /**
  * Created by xinzy on 17/1/16.
  */
-
 public class ListSimple<T>
 {
     private boolean error;
@@ -34,9 +35,10 @@ public class ListSimple<T>
     @Override
     public String toString()
     {
-        return "ListSimple{" +
-                "error=" + error +
-                ", results=" + results +
-                '}';
+        if (Macro.DEBUG)
+        {
+            return "ListSimple{" + "error=" + error + ", results=" + results + '}';
+        }
+        return "";
     }
 }

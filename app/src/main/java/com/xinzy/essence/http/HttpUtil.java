@@ -1,5 +1,6 @@
 package com.xinzy.essence.http;
 
+import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.xinzy.essence.util.FileUtil;
@@ -30,7 +31,7 @@ public class HttpUtil
             {
                 if (mOkHttpClient == null)
                 {
-                    mOkHttpClient = new OkHttpClient.Builder().build();
+                    mOkHttpClient = new OkHttpClient.Builder().addNetworkInterceptor(new StethoInterceptor()).build();
                 }
             }
         }

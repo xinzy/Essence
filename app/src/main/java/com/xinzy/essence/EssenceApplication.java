@@ -2,6 +2,7 @@ package com.xinzy.essence;
 
 import android.app.Application;
 
+import com.facebook.stetho.Stetho;
 import com.squareup.picasso.Picasso;
 import com.xinzy.essence.http.HttpUtil;
 import com.xinzy.essence.http.PicassoDownloader;
@@ -20,6 +21,7 @@ public class EssenceApplication extends Application
 
         instance = this;
         Picasso.setSingletonInstance(new Picasso.Builder(this).downloader(new PicassoDownloader(HttpUtil.getPicassoClient())).build());
+        Stetho.initializeWithDefaults(this);
     }
 
     public static EssenceApplication getInstance()

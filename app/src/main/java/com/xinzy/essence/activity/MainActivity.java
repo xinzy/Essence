@@ -2,14 +2,13 @@ package com.xinzy.essence.activity;
 
 import android.Manifest;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -18,11 +17,11 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.squareup.picasso.Picasso;
 import com.xinzy.essence.R;
 import com.xinzy.essence.adapter.BeautyAdapter;
 import com.xinzy.essence.base.BaseActivity;
@@ -46,6 +45,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     private static final int MENU_FIRST = View.generateViewId();
 
+    private AppBarLayout mAppBar;
     private SwipeRefreshLayout mRefreshLayout;
     private InternalRecyclerView mRecycleView;
     private BeautyAdapter mAdapter;
@@ -56,6 +56,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mAppBar = (AppBarLayout) findViewById(R.id.mainAppBar);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -90,19 +91,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         mRecycleView.setLayoutManager(manager);
         mRecycleView.addOnScrollListener(new InternalRecyclerView.InternalScrollListener()
         {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState)
-            {
-                super.onScrollStateChanged(recyclerView, newState);
-                if (newState == RecyclerView.SCROLL_STATE_IDLE || newState == RecyclerView.SCROLL_STATE_DRAGGING)
-                {
-                    Picasso.with(MainActivity.this).resumeTag(TAG);
-                } else
-                {
-                    Picasso.with(MainActivity.this).pauseTag(TAG);
-                }
-            }
-
             @Override
             public void onScrollToBottom(RecyclerView view, int state)
             {
@@ -189,6 +177,25 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch (item.getItemId())
+        {
+            case R.id.action_search:
+                SearchActivity.start(this, mAppBar);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public void onRefresh()
     {
         mPresenter.start();
@@ -232,10 +239,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @Override
     public void onImageClick(ImageView img, Essence essence)
     {
-        Intent intent = new Intent(this, ImageActivity.class);
-        intent.putExtra("transition", "share");
-        intent.putExtra(ImageActivity.KEY_ESSENCE, essence);
-        startActivity(intent, ActivityOptionsCompat.makeSceneTransitionAnimation(this, img, getString(R.string.imageTransitionName)).toBundle());
+        ImageActivity.start(this, img, essence.getUrl());
     }
 
     @Override
