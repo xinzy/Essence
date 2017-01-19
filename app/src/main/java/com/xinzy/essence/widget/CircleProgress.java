@@ -12,7 +12,6 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import com.xinzy.essence.R;
-import com.xinzy.essence.util.L;
 
 /**
  * Created by xinzy on 17/1/19.
