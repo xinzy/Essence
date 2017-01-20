@@ -1,9 +1,9 @@
 package com.xinzy.essence.activity;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,16 +12,36 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.xinzy.essence.R;
+import com.xinzy.essence.adapter.DayProviders;
 import com.xinzy.essence.model.DayType;
+import com.xinzy.essence.model.Essence;
 import com.xinzy.essence.presenter.DayPresenter;
+import com.xinzy.essence.presenter.impl.DayPresenterImpl;
+import com.xinzy.essence.util.Preconditions;
 import com.xinzy.essence.view.DayView;
 import com.xinzy.essence.widget.InternalRecyclerView;
+import com.xinzy.essence.widget.adapter.MultiTypeAdapter;
 
-public class DayActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener, DayView
+public class DayActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener, DayView,
+        MultiTypeAdapter.OnViewEventListener
 {
+    private static final String KEY_YEAR = "YEAR";
+    private static final String KEY_MONTH = "MONTH";
+    private static final String KEY_DAY = "DAY";
+    
     private SwipeRefreshLayout mRefreshLayout;
+    private MultiTypeAdapter mAdapter;
 
     private DayPresenter mDayPresenter;
+    
+    public static void start(Context context, int year, int month, int day)
+    {
+        Intent starter = new Intent(context, DayActivity.class);
+        starter.putExtra(KEY_YEAR, year);
+        starter.putExtra(KEY_MONTH, month);
+        starter.putExtra(KEY_DAY, day);
+        context.startActivity(starter);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -32,23 +52,27 @@ public class DayActivity extends AppCompatActivity implements SwipeRefreshLayout
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
         mRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.dayRefreshLayout);
         mRefreshLayout.setOnRefreshListener(this);
 
         InternalRecyclerView recyclerView = (InternalRecyclerView) findViewById(R.id.dayRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        recyclerView.setHasFixedSize(false);
+        recyclerView.addItemDecoration(new InternalRecyclerView.LinearItemDecoration(this, LinearLayoutManager.HORIZONTAL));
 
+        DayProviders.CategoryProvider categoryProvider = new DayProviders.CategoryProvider();
+        DayProviders.TitleProvider titleProvider = new DayProviders.TitleProvider();
+        titleProvider.setOnViewEventListener(this);
+        mAdapter = new MultiTypeAdapter();
+        mAdapter.registerProvider(String.class, categoryProvider).registerProvider(Essence.class, titleProvider);
+        recyclerView.setAdapter(mAdapter);
+
+        Intent intent = getIntent();
+        int year = intent.getIntExtra(KEY_YEAR, 0);
+        int month = intent.getIntExtra(KEY_MONTH, 0);
+        int day = intent.getIntExtra(KEY_DAY, 0);
+
+        mDayPresenter = new DayPresenterImpl(this, year, month, day);
         mDayPresenter.start();
     }
 
@@ -84,10 +108,21 @@ public class DayActivity extends AppCompatActivity implements SwipeRefreshLayout
     @Override
     public void setData(DayType data)
     {
+        mAdapter.replace(data.getItems());
     }
 
     @Override
     public void setPresenter(@NonNull DayPresenter presenter)
     {
+    }
+
+    @Override
+    public void onViewEvent(View view, short event, Object... args)
+    {
+        if (event == DayProviders.TitleProvider.EVENT_TITLE_CLICK && args != null)
+        {
+            Essence essence = (Essence) Preconditions.checkNull(args[0]);
+            WebViewActivity.start(this, essence.getUrl());
+        }
     }
 }

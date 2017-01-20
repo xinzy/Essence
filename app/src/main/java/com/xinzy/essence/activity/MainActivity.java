@@ -237,6 +237,12 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     @Override
+    public void enter(int year, int month, int day)
+    {
+        DayActivity.start(this, year, month, day);
+    }
+
+    @Override
     public void onImageClick(ImageView img, Essence essence)
     {
         ImageActivity.start(this, img, essence.getUrl());
@@ -245,5 +251,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @Override
     public void onTextClick(Essence essence)
     {
+        mPresenter.onTextClick(essence);
     }
 }

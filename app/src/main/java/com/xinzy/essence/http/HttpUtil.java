@@ -41,7 +41,7 @@ public class HttpUtil
 
     public static OkHttpClient getPicassoClient()
     {
-        return new OkHttpClient.Builder().cache(new Cache(new File(FileUtil.getCacheRootDirection(), "picasso"), Macro.IMAGE_CACHE_SIZE)).build();
+        return new OkHttpClient.Builder().cache(new Cache(new File(FileUtil.getCacheRootDirection(), "cache/picasso"), Macro.IMAGE_CACHE_SIZE)).build();
     }
 
     public static Retrofit getRetrofitInstance()

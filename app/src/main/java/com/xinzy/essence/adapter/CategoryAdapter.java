@@ -11,7 +11,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.xinzy.essence.R;
-import com.xinzy.essence.base.BaseRecycleAdapter;
+import com.xinzy.essence.widget.adapter.BaseRecycleAdapter;
 import com.xinzy.essence.model.Essence;
 import com.xinzy.essence.view.CategoryView;
 

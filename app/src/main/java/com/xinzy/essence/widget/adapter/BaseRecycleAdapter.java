@@ -1,4 +1,4 @@
-package com.xinzy.essence.base;
+package com.xinzy.essence.widget.adapter;
 
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
