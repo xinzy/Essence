@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
@@ -12,6 +13,8 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
@@ -22,12 +25,23 @@ import com.xinzy.essence.util.FileUtils;
 import uk.co.senab.photoview.PhotoView;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
-public class ImageActivity extends BaseActivity implements View.OnClickListener, PhotoViewAttacher.OnPhotoTapListener
+import static com.xinzy.essence.R.id.fab;
+
+public class ImageActivity extends BaseActivity implements View.OnClickListener,
+        PhotoViewAttacher.OnPhotoTapListener
 {
     private static final String KEY_IMAGE = "IMAGE";
 
-    private String mImageUrl;
+    private AppBarLayout         mAppBarLayout;
+    private Toolbar              mToolbar;
+    private FloatingActionButton mActionButton;
+    private Animation            mShowAnim;
+    private Animation            mHideAnim;
+
+
     private PhotoViewAttacher mAttacher;
+    private String            mImageUrl;
+    private boolean           isHiddenBar;
 
     public static void start(Activity activity, View view, String url)
     {
@@ -35,10 +49,10 @@ public class ImageActivity extends BaseActivity implements View.OnClickListener,
         starter.putExtra("transition", "share");
         starter.putExtra(KEY_IMAGE, url);
         String sharedElementName = activity.getString(R.string.imageTransitionName);
-        Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, view, sharedElementName).toBundle();
+        Bundle bundle            = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, view, sharedElementName).toBundle();
         ActivityCompat.startActivity(activity, starter, bundle);
     }
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -46,12 +60,13 @@ public class ImageActivity extends BaseActivity implements View.OnClickListener,
         setContentView(R.layout.activity_image);
         mImageUrl = getIntent().getStringExtra(KEY_IMAGE);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        mAppBarLayout = (AppBarLayout) findViewById(R.id.imageAppBar);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(this);
+        mActionButton = (FloatingActionButton) findViewById(R.id.fab);
+        mActionButton.setOnClickListener(this);
 
         PhotoView imageView = (PhotoView) findViewById(R.id.contentImage);
         Picasso.with(this).load(mImageUrl).into(imageView);
@@ -77,8 +92,9 @@ public class ImageActivity extends BaseActivity implements View.OnClickListener,
     {
         switch (v.getId())
         {
-        case R.id.fab:
-            Picasso.with(this).load(mImageUrl).into(new Target() {
+        case fab:
+            Picasso.with(this).load(mImageUrl).into(new Target()
+            {
                 @Override
                 public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from)
                 {
@@ -99,7 +115,25 @@ public class ImageActivity extends BaseActivity implements View.OnClickListener,
     @Override
     public void onPhotoTap(View view, float x, float y)
     {
-
+        if (isHiddenBar)
+        {
+            isHiddenBar = false;
+            if (mShowAnim == null)
+            {
+                mShowAnim = AnimationUtils.loadAnimation(this, R.anim.alpha_show);
+            }
+            mAppBarLayout.startAnimation(mShowAnim);
+            mActionButton.startAnimation(mShowAnim);
+        } else
+        {
+            isHiddenBar = true;
+            if (mHideAnim == null)
+            {
+                mHideAnim = AnimationUtils.loadAnimation(this, R.anim.alpha_hide);
+            }
+            mAppBarLayout.startAnimation(mHideAnim);
+            mActionButton.startAnimation(mHideAnim);
+        }
     }
 
     @Override
