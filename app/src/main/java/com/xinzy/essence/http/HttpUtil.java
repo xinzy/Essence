@@ -3,7 +3,7 @@ package com.xinzy.essence.http;
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.xinzy.essence.util.FileUtil;
+import com.xinzy.essence.util.FileUtils;
 import com.xinzy.essence.util.Macro;
 
 import java.io.File;
@@ -41,7 +41,7 @@ public class HttpUtil
 
     public static OkHttpClient getPicassoClient()
     {
-        return new OkHttpClient.Builder().cache(new Cache(new File(FileUtil.getCacheRootDirection(), "cache/picasso"), Macro.IMAGE_CACHE_SIZE)).build();
+        return new OkHttpClient.Builder().cache(new Cache(new File(FileUtils.getCacheRootDirection(), "cache/picasso"), Macro.IMAGE_CACHE_SIZE)).build();
     }
 
     public static Retrofit getRetrofitInstance()

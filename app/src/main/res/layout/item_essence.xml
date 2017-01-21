@@ -2,19 +2,48 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/essenceContainer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:clickable="true"
-    android:background="?android:attr/selectableItemBackground">
+    android:padding="12dp"
+    android:background="@drawable/bg_card">
 
     <TextView
         android:id="@+id/itemTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="12dp"
+        android:maxLines="2"
         tools:text="测试啦啦啦"
         android:textSize="14sp"
         android:textColor="#333"/>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="12dp">
+
+        <TextView
+            android:id="@+id/authorText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableStart="@drawable/author"
+            android:drawablePadding="4dp"
+            tools:text="作者"
+            android:textSize="12sp"
+            android:textColor="#999"/>
+
+        <TextView
+            android:id="@+id/timeText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableStart="@drawable/time"
+            android:drawablePadding="4dp"
+            tools:text="时间"
+            android:textSize="12sp"
+            android:textColor="#999"/>
+    </LinearLayout>
 </LinearLayout>

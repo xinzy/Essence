@@ -3,8 +3,9 @@ package com.xinzy.essence.widget.adapter;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
+
+import com.xinzy.essence.widget.OnViewEventListener;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -190,7 +191,7 @@ public class MultiTypeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     public static abstract class ItemViewProvider<T, VH extends RecyclerView.ViewHolder>
     {
-        private MultiTypeAdapter mAdapter;
+        private   MultiTypeAdapter    mAdapter;
         protected OnViewEventListener mOnViewEventListener;
 
         void setAdapter(MultiTypeAdapter adapter)
@@ -211,10 +212,5 @@ public class MultiTypeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         public abstract VH onCreateViewHolder(LayoutInflater inflater, ViewGroup parent);
 
         public abstract void onBindViewHolder(VH holder, T data);
-    }
-
-    public static interface OnViewEventListener
-    {
-        void onViewEvent(View view, short event, Object... args);
     }
 }

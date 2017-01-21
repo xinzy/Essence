@@ -2,27 +2,31 @@ package com.xinzy.essence.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 import com.xinzy.essence.R;
 import com.xinzy.essence.base.BaseActivity;
+import com.xinzy.essence.util.FileUtils;
 
 import uk.co.senab.photoview.PhotoView;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
-public class ImageActivity extends BaseActivity
+public class ImageActivity extends BaseActivity implements View.OnClickListener, PhotoViewAttacher.OnPhotoTapListener
 {
     private static final String KEY_IMAGE = "IMAGE";
 
+    private String mImageUrl;
     private PhotoViewAttacher mAttacher;
 
     public static void start(Activity activity, View view, String url)
@@ -40,29 +44,19 @@ public class ImageActivity extends BaseActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image);
-        String url = getIntent().getStringExtra(KEY_IMAGE);
+        mImageUrl = getIntent().getStringExtra(KEY_IMAGE);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null)
-        {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
-            }
-        });
+        fab.setOnClickListener(this);
 
         PhotoView imageView = (PhotoView) findViewById(R.id.contentImage);
-        Picasso.with(this).load(url).into(imageView);
+        Picasso.with(this).load(mImageUrl).into(imageView);
         mAttacher = new PhotoViewAttacher(imageView);
+        mAttacher.setOnPhotoTapListener(this);
         mAttacher.update();
     }
 
@@ -77,4 +71,38 @@ public class ImageActivity extends BaseActivity
 
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void onClick(final View v)
+    {
+        switch (v.getId())
+        {
+        case R.id.fab:
+            Picasso.with(this).load(mImageUrl).into(new Target() {
+                @Override
+                public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from)
+                {
+                    FileUtils.saveImage(bitmap);
+                    Snackbar.make(v, "Save Success", Snackbar.LENGTH_LONG).show();
+                }
+
+                @Override
+                public void onBitmapFailed(Drawable errorDrawable) {}
+
+                @Override
+                public void onPrepareLoad(Drawable placeHolderDrawable) {}
+            });
+            break;
+        }
+    }
+
+    @Override
+    public void onPhotoTap(View view, float x, float y)
+    {
+
+    }
+
+    @Override
+    public void onOutsidePhotoTap()
+    {}
 }

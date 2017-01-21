@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import com.xinzy.essence.R;
 import com.xinzy.essence.activity.WebViewActivity;
 import com.xinzy.essence.adapter.CategoryAdapter;
+import com.xinzy.essence.adapter.holder.EssenceHolder;
 import com.xinzy.essence.base.BaseFragment;
 import com.xinzy.essence.model.Essence;
 import com.xinzy.essence.presenter.CategoryPresenter;
@@ -21,16 +22,16 @@ import com.xinzy.essence.presenter.impl.CategoryPresenterImpl;
 import com.xinzy.essence.util.L;
 import com.xinzy.essence.view.CategoryView;
 import com.xinzy.essence.widget.InternalRecyclerView;
+import com.xinzy.essence.widget.OnViewEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.provider.MediaStore.Video.VideoColumns.CATEGORY;
-
 /**
  * Created by xinzy on 17/1/17.
  */
-public class CategoryFragment extends BaseFragment implements CategoryView, SwipeRefreshLayout.OnRefreshListener, CategoryView.OnItemClickListener
+public class CategoryFragment extends BaseFragment implements CategoryView, SwipeRefreshLayout.OnRefreshListener,
+        OnViewEventListener
 {
     private static final String ARG_CATEGORY = "CATEGORY";
 
@@ -52,7 +53,7 @@ public class CategoryFragment extends BaseFragment implements CategoryView, Swip
     {
         CategoryFragment fragment = new CategoryFragment();
         Bundle           args     = new Bundle();
-        args.putString(CATEGORY, category);
+        args.putString(ARG_CATEGORY, category);
         fragment.setArguments(args);
         return fragment;
     }
@@ -61,7 +62,7 @@ public class CategoryFragment extends BaseFragment implements CategoryView, Swip
     public void onAttach(Context context)
     {
         super.onAttach(context);
-        mCategory = getArguments().getString(CATEGORY);
+        mCategory = getArguments().getString(ARG_CATEGORY);
         mPresenter = new CategoryPresenterImpl(this, mCategory);
     }
 
@@ -94,7 +95,7 @@ public class CategoryFragment extends BaseFragment implements CategoryView, Swip
             }
         });
         mCategoryAdapter = new CategoryAdapter(new ArrayList<Essence>());
-        mCategoryAdapter.setOnItemClickListener(this);
+        mCategoryAdapter.setOnViewEventListener(this);
         recyclerView.setAdapter(mCategoryAdapter);
         return rootView;
     }
@@ -139,10 +140,15 @@ public class CategoryFragment extends BaseFragment implements CategoryView, Swip
     }
 
     @Override
-    public void onItemClick(Essence essence)
+    public void onViewEvent(View view, short event, Object... args)
     {
-        L.v("on item click " + essence);
-        WebViewActivity.start(getContext(), essence.getUrl());
+        if (event == EssenceHolder.EVENT_CONTAINER_CLICKED)
+        {
+            assert args != null && args[0] != null;
+            Essence essence = (Essence) args[0];
+            L.v("on item click " + essence);
+            WebViewActivity.start(getContext(), essence.getUrl());
+        }
     }
 
     @Override
@@ -178,6 +184,5 @@ public class CategoryFragment extends BaseFragment implements CategoryView, Swip
     @Override
     public void setPresenter(@NonNull CategoryPresenter presenter)
     {
-
     }
 }

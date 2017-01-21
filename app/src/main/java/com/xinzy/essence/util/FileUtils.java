@@ -1,15 +1,17 @@
 package com.xinzy.essence.util;
 
+import android.graphics.Bitmap;
 import android.os.Environment;
 
 import com.xinzy.essence.EssenceApplication;
 
 import java.io.File;
+import java.io.FileOutputStream;
 
 /**
  * Created by Xinzy on 2017-01-17.
  */
-public class FileUtil
+public class FileUtils
 {
     public static File getCacheRootDirection()
     {
@@ -25,5 +27,21 @@ public class FileUtil
         }
 
         return rootDir;
+    }
+
+    public static boolean saveImage(Bitmap bitmap)
+    {
+        try
+        {
+            File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), System.currentTimeMillis() + ".jpg");
+            FileOutputStream fos = new FileOutputStream(file);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+            fos.flush();
+            fos.close();
+            return true;
+        } catch (Exception e)
+        {
+            return false;
+        }
     }
 }

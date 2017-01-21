@@ -13,6 +13,7 @@ import android.view.View;
 
 import com.xinzy.essence.R;
 import com.xinzy.essence.adapter.DayProviders;
+import com.xinzy.essence.adapter.holder.EssenceHolder;
 import com.xinzy.essence.model.DayType;
 import com.xinzy.essence.model.Essence;
 import com.xinzy.essence.presenter.DayPresenter;
@@ -20,10 +21,11 @@ import com.xinzy.essence.presenter.impl.DayPresenterImpl;
 import com.xinzy.essence.util.Preconditions;
 import com.xinzy.essence.view.DayView;
 import com.xinzy.essence.widget.InternalRecyclerView;
+import com.xinzy.essence.widget.OnViewEventListener;
 import com.xinzy.essence.widget.adapter.MultiTypeAdapter;
 
 public class DayActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener, DayView,
-        MultiTypeAdapter.OnViewEventListener
+        OnViewEventListener
 {
     private static final String KEY_YEAR = "YEAR";
     private static final String KEY_MONTH = "MONTH";
@@ -119,7 +121,7 @@ public class DayActivity extends AppCompatActivity implements SwipeRefreshLayout
     @Override
     public void onViewEvent(View view, short event, Object... args)
     {
-        if (event == DayProviders.TitleProvider.EVENT_TITLE_CLICK && args != null)
+        if (event == EssenceHolder.EVENT_CONTAINER_CLICKED && args != null)
         {
             Essence essence = (Essence) Preconditions.checkNull(args[0]);
             WebViewActivity.start(this, essence.getUrl());

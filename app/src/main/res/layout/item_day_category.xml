@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:background="@color/colorPressed">
+    android:background="#BBB">
 
     <TextView
         android:id="@+id/itemTitle"
@@ -17,6 +17,6 @@
         android:paddingBottom="16dp"
         tools:text="测试标题"
         android:textSize="16sp"
-        android:textColor="#333"/>
+        android:textColor="@color/white"/>
 
 </LinearLayout>

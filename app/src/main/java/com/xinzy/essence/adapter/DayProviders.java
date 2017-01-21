@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.xinzy.essence.R;
+import com.xinzy.essence.adapter.holder.EssenceHolder;
 import com.xinzy.essence.model.Essence;
 import com.xinzy.essence.widget.adapter.MultiTypeAdapter;
 
@@ -31,20 +32,20 @@ public class DayProviders
         }
     }
 
-    public static class TitleProvider extends MultiTypeAdapter.ItemViewProvider<Essence, TitleHolder>
+    public static class TitleProvider extends MultiTypeAdapter.ItemViewProvider<Essence, EssenceHolder>
     {
-        public static final short EVENT_TITLE_CLICK = 0x100;
-
         @Override
-        public TitleHolder onCreateViewHolder(LayoutInflater inflater, ViewGroup parent)
+        public EssenceHolder onCreateViewHolder(LayoutInflater inflater, ViewGroup parent)
         {
-            return new TitleHolder(inflater.inflate(R.layout.item_day_title, parent, false), mOnViewEventListener);
+            EssenceHolder holder = new EssenceHolder(inflater.inflate(R.layout.item_essence, parent, false));
+            holder.setOnViewEventListener(mOnViewEventListener);
+            return holder;
         }
 
         @Override
-        public void onBindViewHolder(TitleHolder holder, Essence data)
+        public void onBindViewHolder(EssenceHolder holder, Essence data)
         {
-            holder.setData(data);
+            holder.convert(data);
         }
     }
 
@@ -60,42 +61,6 @@ public class DayProviders
         void setData(String data)
         {
             mTitleText.setText(data);
-        }
-    }
-
-    static class TitleHolder extends RecyclerView.ViewHolder implements View.OnClickListener
-    {
-        private TextView mTitleText;
-
-        private Essence mEssence;
-        private MultiTypeAdapter.OnViewEventListener mOnViewEventListener;
-
-        TitleHolder(View itemView, MultiTypeAdapter.OnViewEventListener onViewEventListener)
-        {
-            super(itemView);
-            mOnViewEventListener = onViewEventListener;
-            mTitleText = (TextView) itemView.findViewById(R.id.itemTitle);
-            mTitleText.setOnClickListener(this);
-        }
-
-        void setData(Essence data)
-        {
-            mEssence = data;
-            mTitleText.setText(data.getContent());
-        }
-
-        @Override
-        public void onClick(View v)
-        {
-            switch (v.getId())
-            {
-                case R.id.itemTitle:
-                    if (mOnViewEventListener != null)
-                    {
-                        mOnViewEventListener.onViewEvent(mTitleText, TitleProvider.EVENT_TITLE_CLICK, mEssence);
-                    }
-                    break;
-            }
         }
     }
 }
