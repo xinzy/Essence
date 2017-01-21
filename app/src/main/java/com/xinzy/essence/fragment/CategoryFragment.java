@@ -75,19 +75,11 @@ public class CategoryFragment extends BaseFragment implements CategoryView, Swip
         InternalRecyclerView recyclerView = (InternalRecyclerView) rootView.findViewById(R.id.categoryRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         recyclerView.setHasFixedSize(false);
-        recyclerView.addItemDecoration(new InternalRecyclerView.LinearItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
         recyclerView.addOnScrollListener(new InternalRecyclerView.InternalScrollListener()
         {
             @Override
-            public void onScrollToTop(RecyclerView view, int state)
-            {
-                L.d("onScrollToTop" + state);
-            }
-
-            @Override
             public void onScrollToBottom(RecyclerView view, int state)
             {
-                L.d("onScrollToBottom" + state);
                 if (state == RecyclerView.SCROLL_STATE_IDLE)
                 {
                     mPresenter.loading(false);

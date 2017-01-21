@@ -2,6 +2,7 @@ package com.xinzy.essence.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -20,8 +21,9 @@ public class WebViewActivity extends BaseActivity
 {
     private static final String KEY_URL = "URL";
 
+    private Toolbar       mToolbar;
     private SafetyWebView mWebView;
-    private ProgressBar mProgressBar;
+    private ProgressBar   mProgressBar;
 
     public static void start(Context context, String url)
     {
@@ -35,8 +37,9 @@ public class WebViewActivity extends BaseActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web_view);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
@@ -46,6 +49,19 @@ public class WebViewActivity extends BaseActivity
 
         String url = getIntent().getStringExtra(KEY_URL);
         mWebView.loadUrl(url);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig)
+    {
+        super.onConfigurationChanged(newConfig);
+        if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT)
+        {
+            mToolbar.setVisibility(View.VISIBLE);
+        } else
+        {
+            mToolbar.setVisibility(View.GONE);
+        }
     }
 
     @Override

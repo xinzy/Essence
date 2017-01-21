@@ -22,7 +22,7 @@ public class CategoryActivity extends BaseActivity
     private static final String KEY_CATEGORY = "CATEGORY";
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
-    private ViewPager mViewPager;
+    private ViewPager            mViewPager;
 
     public static void start(Context context, String category)
     {
@@ -49,7 +49,7 @@ public class CategoryActivity extends BaseActivity
         tabLayout.setupWithViewPager(mViewPager);
 
         String category = getIntent().getStringExtra(KEY_CATEGORY);
-        int position = 0;
+        int    position = 0;
         for (int i = 0; i < Macro.CATEGORYS.length; i++)
         {
             if (Macro.CATEGORYS[i].equals(category))

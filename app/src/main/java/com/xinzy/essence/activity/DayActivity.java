@@ -60,7 +60,6 @@ public class DayActivity extends AppCompatActivity implements SwipeRefreshLayout
         InternalRecyclerView recyclerView = (InternalRecyclerView) findViewById(R.id.dayRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         recyclerView.setHasFixedSize(false);
-        recyclerView.addItemDecoration(new InternalRecyclerView.LinearItemDecoration(this, LinearLayoutManager.HORIZONTAL));
 
         DayProviders.CategoryProvider categoryProvider = new DayProviders.CategoryProvider();
         DayProviders.TitleProvider titleProvider = new DayProviders.TitleProvider();

@@ -22,12 +22,18 @@
             app:popupTheme="@style/AppTheme.PopupOverlay"/>
     </android.support.design.widget.AppBarLayout>
 
-    <uk.co.senab.photoview.PhotoView
-        android:id="@+id/contentImage"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:transitionName="@string/imageTransitionName"
-        android:contentDescription="@null"/>
+        android:background="#21272b">
+
+        <uk.co.senab.photoview.PhotoView
+            android:id="@+id/contentImage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@null"
+            android:transitionName="@string/imageTransitionName"/>
+    </FrameLayout>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"

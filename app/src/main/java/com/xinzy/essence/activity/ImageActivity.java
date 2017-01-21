@@ -2,9 +2,11 @@ package com.xinzy.essence.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -16,6 +18,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 import com.xinzy.essence.R;
@@ -69,10 +72,34 @@ public class ImageActivity extends BaseActivity implements View.OnClickListener,
         mActionButton.setOnClickListener(this);
 
         PhotoView imageView = (PhotoView) findViewById(R.id.contentImage);
-        Picasso.with(this).load(mImageUrl).into(imageView);
+        Picasso.with(this).load(mImageUrl).into(imageView, new Callback() {
+            @Override
+            public void onSuccess()
+            {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run()
+                    {
+                        hideToolbar();
+                    }
+                }, 3000);
+            }
+
+            @Override
+            public void onError() {}
+        });
         mAttacher = new PhotoViewAttacher(imageView);
         mAttacher.setOnPhotoTapListener(this);
         mAttacher.update();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig)
+    {
+        super.onConfigurationChanged(newConfig);
+        isHiddenBar = false;
+        mAppBarLayout.setVisibility(View.VISIBLE);
+        mActionButton.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -117,26 +144,38 @@ public class ImageActivity extends BaseActivity implements View.OnClickListener,
     {
         if (isHiddenBar)
         {
-            isHiddenBar = false;
-            if (mShowAnim == null)
-            {
-                mShowAnim = AnimationUtils.loadAnimation(this, R.anim.alpha_show);
-            }
-            mAppBarLayout.startAnimation(mShowAnim);
-            mActionButton.startAnimation(mShowAnim);
+            showToolbar();
         } else
         {
-            isHiddenBar = true;
-            if (mHideAnim == null)
-            {
-                mHideAnim = AnimationUtils.loadAnimation(this, R.anim.alpha_hide);
-            }
-            mAppBarLayout.startAnimation(mHideAnim);
-            mActionButton.startAnimation(mHideAnim);
+            hideToolbar();
         }
     }
 
     @Override
     public void onOutsidePhotoTap()
     {}
+
+    private void hideToolbar()
+    {
+        if (isHiddenBar) return;
+        isHiddenBar = true;
+        if (mHideAnim == null)
+        {
+            mHideAnim = AnimationUtils.loadAnimation(this, R.anim.alpha_hide);
+        }
+        mAppBarLayout.startAnimation(mHideAnim);
+        mActionButton.startAnimation(mHideAnim);
+    }
+
+    private void showToolbar()
+    {
+        if (!isHiddenBar) return;
+        isHiddenBar = false;
+        if (mShowAnim == null)
+        {
+            mShowAnim = AnimationUtils.loadAnimation(this, R.anim.alpha_show);
+        }
+        mAppBarLayout.startAnimation(mShowAnim);
+        mActionButton.startAnimation(mShowAnim);
+    }
 }
