@@ -1,8 +1,8 @@
 package com.xinzy.essence.presenter.impl;
 
 import com.xinzy.essence.api.ApiCallback;
-import com.xinzy.essence.api.DayServiceApi;
-import com.xinzy.essence.api.impl.DayServiceApiRetrofitImp;
+import com.xinzy.essence.api.GankApi;
+import com.xinzy.essence.api.impl.GankApiRetrofitImpl;
 import com.xinzy.essence.model.DayType;
 import com.xinzy.essence.presenter.DayPresenter;
 import com.xinzy.essence.util.EssenceException;
@@ -15,7 +15,7 @@ import com.xinzy.essence.view.DayView;
 public class DayPresenterImpl implements DayPresenter
 {
     private DayView mView;
-    private DayServiceApi<DayType> mServiceApi;
+    private GankApi mGankApi;
 
     private int year, month, day;
     private boolean isLoading;
@@ -26,7 +26,7 @@ public class DayPresenterImpl implements DayPresenter
         this.year = year;
         this.month = month;
         this.day = day;
-        mServiceApi = new DayServiceApiRetrofitImp();
+        mGankApi = new GankApiRetrofitImpl();
     }
 
     @Override
@@ -34,7 +34,7 @@ public class DayPresenterImpl implements DayPresenter
     {
         if (isLoading) return;
         isLoading = true;
-        mServiceApi.day(year, month, day, new ApiCallback<DayType>()
+        mGankApi.day(year, month, day, new ApiCallback<DayType>()
         {
             @Override
             public void onStart()

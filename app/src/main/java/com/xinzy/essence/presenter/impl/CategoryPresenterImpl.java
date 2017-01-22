@@ -3,8 +3,8 @@ package com.xinzy.essence.presenter.impl;
 import android.support.annotation.NonNull;
 
 import com.xinzy.essence.api.ApiCallback;
-import com.xinzy.essence.api.ListServiceApi;
-import com.xinzy.essence.api.impl.ListServiceApiRetrofitImpl;
+import com.xinzy.essence.api.GankApi;
+import com.xinzy.essence.api.impl.GankApiRetrofitImpl;
 import com.xinzy.essence.model.Essence;
 import com.xinzy.essence.presenter.CategoryPresenter;
 import com.xinzy.essence.util.EssenceException;
@@ -22,8 +22,8 @@ public class CategoryPresenterImpl implements CategoryPresenter
 {
     private CategoryView mView;
 
-    private String                        mCategory;
-    private ListServiceApi<List<Essence>> mServiceApi;
+    private String mCategory;
+    private GankApi mGankApi;
 
     private int mPage = 1;
     private boolean isLoading;
@@ -32,7 +32,7 @@ public class CategoryPresenterImpl implements CategoryPresenter
     {
         mView = Preconditions.checkNull(view);
         mCategory = Preconditions.checkNull(category);
-        mServiceApi = new ListServiceApiRetrofitImpl(mCategory);
+        mGankApi = new GankApiRetrofitImpl();
     }
 
     @Override
@@ -42,7 +42,8 @@ public class CategoryPresenterImpl implements CategoryPresenter
         isLoading = true;
         if (refresh) mPage = 1;
 
-        mServiceApi.category(PER_PAGE, mPage, new ApiCallback<List<Essence>>() {
+        mGankApi.category(mCategory, PER_PAGE, mPage, new ApiCallback<List<Essence>>()
+        {
             @Override
             public void onStart()
             {
@@ -54,7 +55,7 @@ public class CategoryPresenterImpl implements CategoryPresenter
             {
                 mView.setData(essences, refresh);
                 mView.hideRefresh();
-                mPage ++;
+                mPage++;
                 isLoading = false;
             }
 
