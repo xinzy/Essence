@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 
 import com.xinzy.essence.R;
 import com.xinzy.essence.activity.WebViewActivity;
-import com.xinzy.essence.adapter.CategoryAdapter;
+import com.xinzy.essence.adapter.DayProviders;
 import com.xinzy.essence.adapter.holder.EssenceHolder;
 import com.xinzy.essence.base.BaseFragment;
 import com.xinzy.essence.model.Essence;
@@ -23,6 +23,7 @@ import com.xinzy.essence.util.L;
 import com.xinzy.essence.view.CategoryView;
 import com.xinzy.essence.widget.InternalRecyclerView;
 import com.xinzy.essence.widget.OnViewEventListener;
+import com.xinzy.essence.widget.adapter.MultiTypeAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +37,7 @@ public class CategoryFragment extends BaseFragment implements CategoryView, Swip
     private static final String ARG_CATEGORY = "CATEGORY";
 
     private SwipeRefreshLayout mRefreshLayout;
-    private CategoryAdapter mCategoryAdapter;
+    private MultiTypeAdapter mCategoryAdapter;
 
     private CategoryPresenter mPresenter;
 
@@ -86,8 +87,11 @@ public class CategoryFragment extends BaseFragment implements CategoryView, Swip
                 }
             }
         });
-        mCategoryAdapter = new CategoryAdapter(new ArrayList<Essence>());
-        mCategoryAdapter.setOnViewEventListener(this);
+
+        mCategoryAdapter = new MultiTypeAdapter(new ArrayList<>());
+        DayProviders.EssenceProvider provider = new DayProviders.EssenceProvider();
+        provider.setOnViewEventListener(this);
+        mCategoryAdapter.registerProvider(Essence.class, provider);
         recyclerView.setAdapter(mCategoryAdapter);
         return rootView;
     }

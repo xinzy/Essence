@@ -1,6 +1,5 @@
 package com.xinzy.essence.adapter.holder;
 
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -9,11 +8,12 @@ import com.xinzy.essence.R;
 import com.xinzy.essence.model.Essence;
 import com.xinzy.essence.util.DateUtils;
 import com.xinzy.essence.widget.OnViewEventListener;
+import com.xinzy.essence.widget.adapter.MultiTypeAdapter;
 
 /**
  * Created by xinzy on 17/1/21.
  */
-public class EssenceHolder extends RecyclerView.ViewHolder implements View.OnClickListener
+public class EssenceHolder extends MultiTypeAdapter.ViewHolder<Essence> implements View.OnClickListener
 {
     public static final short EVENT_CONTAINER_CLICKED = 0x100;
 
@@ -55,6 +55,7 @@ public class EssenceHolder extends RecyclerView.ViewHolder implements View.OnCli
         }
     }
 
+    @Override
     public void convert(Essence essence)
     {
         mEssence = essence;

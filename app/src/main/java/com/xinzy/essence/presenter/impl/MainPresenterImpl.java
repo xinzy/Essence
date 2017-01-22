@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.xinzy.essence.api.ApiCallback;
 import com.xinzy.essence.api.GankApi;
-import com.xinzy.essence.api.impl.GankApiRetrofitImpl;
+import com.xinzy.essence.api.impl.GankApiRxImpl;
 import com.xinzy.essence.model.Essence;
 import com.xinzy.essence.presenter.MainPresenter;
 import com.xinzy.essence.util.EssenceException;
@@ -34,7 +34,7 @@ public class MainPresenterImpl implements MainPresenter
     {
         this.mMainView = Preconditions.checkNull(view);
         this.mCategory = Preconditions.checkNull(category);
-        mGankApi = new GankApiRetrofitImpl();
+        mGankApi = new GankApiRxImpl();
     }
 
     @Override

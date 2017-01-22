@@ -14,5 +14,5 @@ public interface GankApi
 {
     void category(String category, int count, int page, @Nullable ApiCallback<List<Essence>> callback);
 
-    void day(int year, int month, int day, @Nullable ApiCallback<DayType> call);
+    void day(int year, int month, int day, @Nullable ApiCallback<DayType> callback);
 }

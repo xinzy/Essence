@@ -1,6 +1,5 @@
 package com.xinzy.essence.adapter;
 
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,15 +23,9 @@ public class DayProviders
         {
             return new CategoryHolder(inflater.inflate(R.layout.item_day_category, parent, false));
         }
-
-        @Override
-        public void onBindViewHolder(CategoryHolder holder, String data)
-        {
-            holder.setData(data);
-        }
     }
 
-    public static class TitleProvider extends MultiTypeAdapter.ItemViewProvider<Essence, EssenceHolder>
+    public static class EssenceProvider extends MultiTypeAdapter.ItemViewProvider<Essence, EssenceHolder>
     {
         @Override
         public EssenceHolder onCreateViewHolder(LayoutInflater inflater, ViewGroup parent)
@@ -49,7 +42,7 @@ public class DayProviders
         }
     }
 
-    static class CategoryHolder extends RecyclerView.ViewHolder
+    static class CategoryHolder extends MultiTypeAdapter.ViewHolder<String>
     {
         private TextView mTitleText;
         CategoryHolder(View itemView)
@@ -58,7 +51,8 @@ public class DayProviders
             mTitleText = (TextView) itemView.findViewById(R.id.itemTitle);
         }
 
-        void setData(String data)
+        @Override
+        public void convert(String data)
         {
             mTitleText.setText(data);
         }

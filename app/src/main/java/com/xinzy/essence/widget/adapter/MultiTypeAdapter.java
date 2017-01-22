@@ -3,6 +3,7 @@ package com.xinzy.essence.widget.adapter;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import com.xinzy.essence.widget.OnViewEventListener;
@@ -14,7 +15,7 @@ import java.util.List;
 /**
  * Created by Xinzy on 2017-01-20.
  */
-public class MultiTypeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
+public class MultiTypeAdapter extends RecyclerView.Adapter<MultiTypeAdapter.ViewHolder>
 {
     private final Object mLock = new Object();
 
@@ -34,7 +35,7 @@ public class MultiTypeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
     {
         if (mInflater == null)
         {
@@ -46,7 +47,7 @@ public class MultiTypeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position)
+    public void onBindViewHolder(ViewHolder holder, int position)
     {
         Object data = mData.get(position);
         ItemViewProvider provider = mTypePool.get(data.getClass());
@@ -84,7 +85,7 @@ public class MultiTypeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         }
     }
 
-    public void addAll(Collection<Object> ts)
+    public void addAll(Collection<?> ts)
     {
         if (ts != null && ts.size() > 0)
         {
@@ -119,7 +120,7 @@ public class MultiTypeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         }
     }
 
-    public void replace(Collection<Object> ts)
+    public void replace(Collection<?> ts)
     {
         if (ts == null || ts.isEmpty())
         {
@@ -135,7 +136,7 @@ public class MultiTypeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         }
     }
 
-    class TypePool
+    private class TypePool
     {
         private List<Class<?>> mTypes;
         private List<ItemViewProvider> mProviders;
@@ -189,7 +190,7 @@ public class MultiTypeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         }
     }
 
-    public static abstract class ItemViewProvider<T, VH extends RecyclerView.ViewHolder>
+    public static abstract class ItemViewProvider<T, VH extends ViewHolder<T>>
     {
         private   MultiTypeAdapter    mAdapter;
         protected OnViewEventListener mOnViewEventListener;
@@ -211,6 +212,19 @@ public class MultiTypeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
         public abstract VH onCreateViewHolder(LayoutInflater inflater, ViewGroup parent);
 
-        public abstract void onBindViewHolder(VH holder, T data);
+        public void onBindViewHolder(VH holder, T data)
+        {
+            holder.convert(data);
+        }
+    }
+
+    public static abstract class ViewHolder<T> extends RecyclerView.ViewHolder
+    {
+        public ViewHolder(View itemView)
+        {
+            super(itemView);
+        }
+
+        public abstract void convert(T data);
     }
 }

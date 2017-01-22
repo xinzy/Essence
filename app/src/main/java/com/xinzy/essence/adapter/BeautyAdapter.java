@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.xinzy.essence.R;
-import com.xinzy.essence.widget.adapter.BaseRecycleAdapter;
+import com.xinzy.essence.widget.adapter.BaseRecyclerAdapter;
 import com.xinzy.essence.model.Essence;
 import com.xinzy.essence.view.MainView;
 
@@ -17,7 +17,7 @@ import java.util.List;
 /**
  * Created by Xinzy on 2017-01-17.
  */
-public class BeautyAdapter extends BaseRecycleAdapter<BeautyAdapter.BeautyHolder, Essence>
+public class BeautyAdapter extends BaseRecyclerAdapter<BeautyAdapter.BeautyHolder, Essence>
 {
     private MainView.OnItemClickListener mOnItemClickListener;
 

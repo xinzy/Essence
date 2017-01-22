@@ -62,7 +62,7 @@ public class DayActivity extends AppCompatActivity implements SwipeRefreshLayout
         recyclerView.setHasFixedSize(false);
 
         DayProviders.CategoryProvider categoryProvider = new DayProviders.CategoryProvider();
-        DayProviders.TitleProvider titleProvider = new DayProviders.TitleProvider();
+        DayProviders.EssenceProvider titleProvider = new DayProviders.EssenceProvider();
         titleProvider.setOnViewEventListener(this);
         mAdapter = new MultiTypeAdapter();
         mAdapter.registerProvider(String.class, categoryProvider).registerProvider(Essence.class, titleProvider);

@@ -15,14 +15,14 @@ import java.util.List;
 /**
  * Created by Xinzy on 2017-01-17.
  */
-public abstract class BaseRecycleAdapter<VH extends RecyclerView.ViewHolder, T> extends RecyclerView.Adapter<VH>
+public abstract class BaseRecyclerAdapter<VH extends RecyclerView.ViewHolder, T> extends RecyclerView.Adapter<VH>
 {
     private final Object mLock = new Object();
     protected List<T> mLists;
     private LayoutInflater mInflater;
     protected Object mTag;
 
-    public BaseRecycleAdapter(@NonNull List<T> lists)
+    public BaseRecyclerAdapter(@NonNull List<T> lists)
     {
         this.mLists = Preconditions.checkNull(lists);
     }
