@@ -1,7 +1,6 @@
 package com.xinzy.essence.adapter.holder;
 
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.xinzy.essence.R;
@@ -17,7 +16,6 @@ public class EssenceHolder extends MultiTypeAdapter.ViewHolder<Essence> implemen
 {
     public static final short EVENT_CONTAINER_CLICKED = 0x100;
 
-    private LinearLayout mContainer;
     private TextView     titleText;
     private TextView     timeText;
     private TextView     authorText;
@@ -29,11 +27,10 @@ public class EssenceHolder extends MultiTypeAdapter.ViewHolder<Essence> implemen
     public EssenceHolder(View itemView)
     {
         super(itemView);
-        mContainer = (LinearLayout) itemView.findViewById(R.id.essenceContainer);
-        titleText = (TextView) itemView.findViewById(R.id.itemTitle);
-        timeText = (TextView) itemView.findViewById(R.id.timeText);
-        authorText = (TextView) itemView.findViewById(R.id.authorText);
-        mContainer.setOnClickListener(this);
+        titleText = get(R.id.itemTitle);
+        timeText = get(R.id.timeText);
+        authorText = get(R.id.authorText);
+        mRootView.setOnClickListener(this);
     }
 
     public void setOnViewEventListener(OnViewEventListener l)
@@ -44,14 +41,9 @@ public class EssenceHolder extends MultiTypeAdapter.ViewHolder<Essence> implemen
     @Override
     public void onClick(View v)
     {
-        switch (v.getId())
+        if (mOnViewEventListener != null)
         {
-        case R.id.essenceContainer:
-            if (mOnViewEventListener != null)
-            {
-                mOnViewEventListener.onViewEvent(mContainer, EVENT_CONTAINER_CLICKED, mEssence);
-            }
-            break;
+            mOnViewEventListener.onViewEvent(mRootView, EVENT_CONTAINER_CLICKED, mEssence);
         }
     }
 

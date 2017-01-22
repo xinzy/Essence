@@ -1,7 +1,10 @@
 package com.xinzy.essence.widget.adapter;
 
+import android.support.annotation.CallSuper;
+import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -220,9 +223,29 @@ public class MultiTypeAdapter extends RecyclerView.Adapter<MultiTypeAdapter.View
 
     public static abstract class ViewHolder<T> extends RecyclerView.ViewHolder
     {
+        protected View mRootView;
+        private SparseArray<View> mViews;
+
         public ViewHolder(View itemView)
         {
             super(itemView);
+            mRootView = itemView;
+            mViews = new SparseArray<>();
+        }
+
+        public <V> V get(@IdRes int id)
+        {
+            View view = mViews.get(id);
+            if (view == null)
+            {
+                view = mRootView.findViewById(id);
+                if (view == null)
+                {
+                    throw new IllegalArgumentException("Wrong id");
+                }
+                mViews.put(id, view);
+            }
+            return (V) view;
         }
 
         public abstract void convert(T data);

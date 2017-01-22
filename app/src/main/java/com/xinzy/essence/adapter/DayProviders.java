@@ -48,7 +48,7 @@ public class DayProviders
         CategoryHolder(View itemView)
         {
             super(itemView);
-            mTitleText = (TextView) itemView.findViewById(R.id.itemTitle);
+            mTitleText = get(R.id.itemTitle);
         }
 
         @Override
