@@ -6,5 +6,5 @@
 
     <color name="transparent">#00000000</color>
     <color name="white">#FFFFFF</color>
-    <color name="colorPressed">#F0F0F0</color>
+    <color name="colorPressed">#CFD8DC</color>
 </resources>
