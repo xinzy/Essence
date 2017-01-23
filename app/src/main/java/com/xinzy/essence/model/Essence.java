@@ -24,6 +24,7 @@ public class Essence implements Parcelable
     private String url;
     private boolean used;
     private String who;
+    private String[] images;
 
     public Essence()
     {
@@ -117,6 +118,30 @@ public class Essence implements Parcelable
     public void setWho(String who)
     {
         this.who = who;
+    }
+
+    public String[] getImages()
+    {
+        return images;
+    }
+
+    public void setImages(String[] images)
+    {
+        this.images = images;
+    }
+
+    public boolean hasImage()
+    {
+        return images != null && images.length > 0;
+    }
+
+    public String getImage()
+    {
+        if (hasImage())
+        {
+            return images[0];
+        }
+        return "";
     }
 
     @Override

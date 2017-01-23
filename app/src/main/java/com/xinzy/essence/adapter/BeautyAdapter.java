@@ -70,7 +70,7 @@ public class BeautyAdapter extends BaseRecyclerAdapter<BeautyAdapter.BeautyHolde
             mData = data;
 
             Picasso.with(img.getContext()).load(data.getUrl()).placeholder(R.drawable.img_default)
-                    .error(R.drawable.img_default).tag(mTag).into(img);
+                    .tag(mTag).into(img);
             text.setText(data.getContent());
         }
 
