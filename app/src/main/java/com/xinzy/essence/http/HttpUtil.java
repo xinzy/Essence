@@ -6,8 +6,6 @@ import com.google.gson.GsonBuilder;
 import com.xinzy.essence.util.FileUtils;
 import com.xinzy.essence.util.Macro;
 
-import java.io.File;
-
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
@@ -41,7 +39,7 @@ public class HttpUtil
 
     public static OkHttpClient getPicassoClient()
     {
-        return new OkHttpClient.Builder().cache(new Cache(new File(FileUtils.getCacheRootDirection(), "cache/picasso"), Macro.IMAGE_CACHE_SIZE)).build();
+        return new OkHttpClient.Builder().cache(new Cache(FileUtils.getPicassoCacheDir(), Macro.IMAGE_CACHE_SIZE)).build();
     }
 
     public static Retrofit getRetrofitInstance()

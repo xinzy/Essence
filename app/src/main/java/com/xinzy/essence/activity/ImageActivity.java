@@ -38,6 +38,7 @@ public class ImageActivity extends BaseActivity implements View.OnClickListener,
     private AppBarLayout         mAppBarLayout;
     private Toolbar              mToolbar;
     private FloatingActionButton mActionButton;
+    private PhotoView            mPhotoView;
     private Animation            mShowAnim;
     private Animation            mHideAnim;
 
@@ -71,8 +72,8 @@ public class ImageActivity extends BaseActivity implements View.OnClickListener,
         mActionButton = (FloatingActionButton) findViewById(R.id.fab);
         mActionButton.setOnClickListener(this);
 
-        PhotoView imageView = (PhotoView) findViewById(R.id.contentImage);
-        Picasso.with(this).load(mImageUrl).into(imageView, new Callback() {
+        mPhotoView = (PhotoView) findViewById(R.id.contentImage);
+        Picasso.with(this).load(mImageUrl).into(mPhotoView, new Callback() {
             @Override
             public void onSuccess()
             {
@@ -88,7 +89,7 @@ public class ImageActivity extends BaseActivity implements View.OnClickListener,
             @Override
             public void onError() {}
         });
-        mAttacher = new PhotoViewAttacher(imageView);
+        mAttacher = new PhotoViewAttacher(mPhotoView);
         mAttacher.setOnPhotoTapListener(this);
         mAttacher.update();
     }

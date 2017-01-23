@@ -29,6 +29,11 @@ public class FileUtils
         return rootDir;
     }
 
+    public static File getPicassoCacheDir()
+    {
+        return new File(getCacheRootDirection(), "cache/picasso");
+    }
+
     public static boolean saveImage(Bitmap bitmap)
     {
         try
