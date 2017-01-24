@@ -15,20 +15,17 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 import com.xinzy.essence.R;
 import com.xinzy.essence.base.BaseActivity;
+import com.xinzy.essence.util.AnimUtils;
 import com.xinzy.essence.util.FileUtils;
 
 import uk.co.senab.photoview.PhotoView;
 import uk.co.senab.photoview.PhotoViewAttacher;
-
-import static com.xinzy.essence.R.id.fab;
 
 public class ImageActivity extends BaseActivity implements View.OnClickListener,
         PhotoViewAttacher.OnPhotoTapListener
@@ -39,9 +36,6 @@ public class ImageActivity extends BaseActivity implements View.OnClickListener,
     private Toolbar              mToolbar;
     private FloatingActionButton mActionButton;
     private PhotoView            mPhotoView;
-    private Animation            mShowAnim;
-    private Animation            mHideAnim;
-
 
     private PhotoViewAttacher mAttacher;
     private String            mImageUrl;
@@ -120,7 +114,7 @@ public class ImageActivity extends BaseActivity implements View.OnClickListener,
     {
         switch (v.getId())
         {
-        case fab:
+        case R.id.fab:
             Picasso.with(this).load(mImageUrl).into(new Target()
             {
                 @Override
@@ -160,23 +154,15 @@ public class ImageActivity extends BaseActivity implements View.OnClickListener,
     {
         if (isHiddenBar) return;
         isHiddenBar = true;
-        if (mHideAnim == null)
-        {
-            mHideAnim = AnimationUtils.loadAnimation(this, R.anim.alpha_hide);
-        }
-        mAppBarLayout.startAnimation(mHideAnim);
-        mActionButton.startAnimation(mHideAnim);
+        AnimUtils.alphaHide(mAppBarLayout);
+        AnimUtils.alphaHide(mActionButton);
     }
 
     private void showToolbar()
     {
         if (!isHiddenBar) return;
         isHiddenBar = false;
-        if (mShowAnim == null)
-        {
-            mShowAnim = AnimationUtils.loadAnimation(this, R.anim.alpha_show);
-        }
-        mAppBarLayout.startAnimation(mShowAnim);
-        mActionButton.startAnimation(mShowAnim);
+        AnimUtils.alphaShow(mAppBarLayout);
+        AnimUtils.alphaShow(mActionButton);
     }
 }

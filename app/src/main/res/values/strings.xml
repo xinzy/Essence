@@ -11,6 +11,7 @@
     <string name="titleActivityDay">每日干货</string>
     <string name="settings">设置</string>
     <string name="search">搜索</string>
+    <string name="refresh">刷新</string>
     <string name="searchHint">搜索干货&#8230;</string>
 
     <string name="remindWriteExternalStorage">为了您App的流畅性，请开启读写存储卡的权限</string>

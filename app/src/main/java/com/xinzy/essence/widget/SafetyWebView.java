@@ -13,6 +13,8 @@ import android.webkit.WebView;
  */
 public class SafetyWebView extends WebView
 {
+    private OnScrollListener mOnScrollListener;
+
     public SafetyWebView(Context context)
     {
         super(context);
@@ -53,5 +55,25 @@ public class SafetyWebView extends WebView
         removeJavascriptInterface("searchBoxJavaBridge_");
         removeJavascriptInterface("accessibility");
         removeJavascriptInterface("accessibilityTraversal");
+    }
+
+    @Override
+    protected void onScrollChanged(int l, int t, int oldl, int oldt)
+    {
+        super.onScrollChanged(l, t, oldl, oldt);
+        if (mOnScrollListener != null)
+        {
+            mOnScrollListener.onScroll(l - oldl, t - oldt);
+        }
+    }
+
+    public void setOnScrollListener(OnScrollListener l)
+    {
+        this.mOnScrollListener = l;
+    }
+
+    public interface OnScrollListener
+    {
+        void onScroll(int dx, int dy);
     }
 }
