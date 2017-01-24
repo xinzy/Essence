@@ -122,7 +122,7 @@ public class DayActivity extends AppCompatActivity implements SwipeRefreshLayout
     {
         if (event == EssenceHolder.EVENT_CONTAINER_CLICKED && args != null)
         {
-            Essence essence = (Essence) Preconditions.checkNull(args[0]);
+            Essence essence = (Essence) Preconditions.checkNotNull(args[0]);
             WebViewActivity.start(this, essence.getUrl());
         }
     }

@@ -32,8 +32,8 @@ public class MainPresenterImpl implements MainPresenter
 
     public MainPresenterImpl(@NonNull MainView view, @NonNull String category)
     {
-        this.mMainView = Preconditions.checkNull(view);
-        this.mCategory = Preconditions.checkNull(category);
+        this.mMainView = Preconditions.checkNotNull(view);
+        this.mCategory = Preconditions.checkNotNull(category);
         mGankApi = new GankApiRxImpl();
     }
 

@@ -22,7 +22,7 @@ public class DayPresenterImpl implements DayPresenter
 
     public DayPresenterImpl(DayView view, int year, int month, int day)
     {
-        this.mView = Preconditions.checkNull(view);
+        this.mView = Preconditions.checkNotNull(view);
         this.year = year;
         this.month = month;
         this.day = day;

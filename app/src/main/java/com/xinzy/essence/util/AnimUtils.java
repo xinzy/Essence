@@ -15,7 +15,7 @@ public class AnimUtils
 
     public static void alphaHide(@NonNull View view)
     {
-        Preconditions.checkNull(view);
+        Preconditions.checkNotNull(view);
 
         Animation anim = AnimationUtils.loadAnimation(view.getContext(), R.anim.alpha_hide);
         view.startAnimation(anim);
@@ -23,7 +23,7 @@ public class AnimUtils
 
     public static void alphaShow(@NonNull View view)
     {
-        Preconditions.checkNull(view);
+        Preconditions.checkNotNull(view);
 
         Animation anim = AnimationUtils.loadAnimation(view.getContext(), R.anim.alpha_show);
         view.startAnimation(anim);

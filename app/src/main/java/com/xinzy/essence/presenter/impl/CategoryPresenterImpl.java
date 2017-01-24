@@ -30,8 +30,8 @@ public class CategoryPresenterImpl implements CategoryPresenter
 
     public CategoryPresenterImpl(@NonNull CategoryView view, String category)
     {
-        mView = Preconditions.checkNull(view);
-        mCategory = Preconditions.checkNull(category);
+        mView = Preconditions.checkNotNull(view);
+        mCategory = Preconditions.checkNotNull(category);
         mGankApi = new GankApiRetrofitImpl();
     }
 

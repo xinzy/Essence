@@ -24,7 +24,7 @@ public abstract class BaseRecyclerAdapter<VH extends RecyclerView.ViewHolder, T>
 
     public BaseRecyclerAdapter(@NonNull List<T> lists)
     {
-        this.mLists = Preconditions.checkNull(lists);
+        this.mLists = Preconditions.checkNotNull(lists);
     }
 
     @LayoutRes

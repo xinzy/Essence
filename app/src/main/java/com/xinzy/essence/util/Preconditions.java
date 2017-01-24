@@ -8,12 +8,12 @@ import android.support.annotation.NonNull;
 public class Preconditions
 {
 
-    public static <T> T checkNull(T t)
+    public static <T> T checkNotNull(T t)
     {
-        return checkNull(t, "arg cannot be null");
+        return checkNotNull(t, "arg cannot be null");
     }
 
-    public static <T> T checkNull(T t, @NonNull String msg)
+    public static <T> T checkNotNull(T t, @NonNull String msg)
     {
         if (t == null)
         {
