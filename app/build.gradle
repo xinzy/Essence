@@ -24,9 +24,11 @@ android {
 
     buildTypes {
         debug {
+            buildConfigField "boolean", "LOG_DEBUG", "true"
             minifyEnabled false
         }
         release {
+            buildConfigField "boolean", "LOG_DEBUG", "false"
             signingConfig signingConfigs.release
             minifyEnabled true
             shrinkResources true

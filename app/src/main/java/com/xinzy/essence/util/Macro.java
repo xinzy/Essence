@@ -1,5 +1,7 @@
 package com.xinzy.essence.util;
 
+import com.xinzy.essence.BuildConfig;
+
 /**
  * Created by xinzy on 17/1/16.
  */
@@ -8,7 +10,7 @@ public class Macro
     /**
      * 是否开启debug
      */
-    public static final boolean DEBUG = true;
+    public static final boolean DEBUG = BuildConfig.LOG_DEBUG;
 
     /**
      * 单页请求数
