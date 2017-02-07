@@ -20,7 +20,7 @@ public class ApiPath
      *
      * etc: http://gank.io/api/search/query/listview/category/Android/count/10/page/1
      */
-    public static final String PATH_SEARCH = "/api/search/query/listview/category/{category}/count/{count}/page/{page}";
+    public static final String PATH_SEARCH = "/api/search/query/{keyword}/category/{category}/count/{count}/page/{page}";
 
     /**
      * 获取某几日干货网站数据:

@@ -33,8 +33,7 @@ public class GankApiRxImpl implements GankApi
         observable.subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<ListSimple<Essence>>()
         {
             @Override
-            public void onCompleted()
-            {}
+            public void onCompleted() {}
 
             @Override
             public void onError(Throwable e)
@@ -52,7 +51,7 @@ public class GankApiRxImpl implements GankApi
                 L.d("request success");
                 if (callback != null)
                 {
-                    callback.onSuccess(data.getResults());
+                    callback.onSuccess(data == null ? null : data.getResults());
                 }
             }
         });
@@ -67,8 +66,7 @@ public class GankApiRxImpl implements GankApi
         observable.subscribeOn(Schedulers.newThread()).subscribeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<DayType>()
         {
             @Override
-            public void onCompleted()
-            {}
+            public void onCompleted() {}
 
             @Override
             public void onError(Throwable e)
@@ -87,6 +85,39 @@ public class GankApiRxImpl implements GankApi
                 if (callback != null)
                 {
                     callback.onSuccess(dayType);
+                }
+            }
+        });
+    }
+
+    @Override
+    public void search(String keyword, String category, int count, int page, @Nullable final ApiCallback<List<Essence>> callback)
+    {
+        GankService service = HttpUtil.getRxRetrofitInstance().create(GankService.class);
+        Observable<ListSimple<Essence>> observable = service.search(keyword, category, count, page);
+        if (callback != null) callback.onStart();
+        observable.subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<ListSimple<Essence>>()
+        {
+            @Override
+            public void onCompleted() {}
+
+            @Override
+            public void onError(Throwable e)
+            {
+                L.e("request failure", e);
+                if (callback != null)
+                {
+                    callback.onFailure(new EssenceException(e));
+                }
+            }
+
+            @Override
+            public void onNext(ListSimple<Essence> data)
+            {
+                L.d("request success");
+                if (callback != null)
+                {
+                    callback.onSuccess(data == null ? null : data.getResults());
                 }
             }
         });

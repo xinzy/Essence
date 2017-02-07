@@ -35,7 +35,7 @@ public class Macro
     /**
      * 支持分类
      */
-    public static final String[] CATEGORYS = {"all", "Android", "iOS", "拓展资源", "前端", "瞎推荐", "App"};
+    public static final String[] CATEGORYS = {"All", "Android", "iOS", "拓展资源", "前端", "瞎推荐", "App"};
 
     /**
      * 扩展分类

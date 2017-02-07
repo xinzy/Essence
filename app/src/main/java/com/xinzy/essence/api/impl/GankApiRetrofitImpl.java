@@ -73,4 +73,29 @@ public class GankApiRetrofitImpl implements GankApi
             }
         });
     }
+
+    @Override
+    public void search(String keyword, String category, int count, int page, @Nullable final ApiCallback<List<Essence>> callback)
+    {
+        GankService service = HttpUtil.getRetrofitInstance().create(GankService.class);
+        Call<ListSimple<Essence>> call = service.search(keyword, category, count, page);
+        if (callback != null) callback.onStart();
+        call.enqueue(new Callback<ListSimple<Essence>>()
+        {
+            @Override
+            public void onResponse(Call<ListSimple<Essence>> call, Response<ListSimple<Essence>> response)
+            {
+                ListSimple<Essence> data = response.body();
+                L.d("request success " + data);
+                if (callback != null) callback.onSuccess(data == null ? null : data.getResults());
+            }
+
+            @Override
+            public void onFailure(Call<ListSimple<Essence>> call, Throwable t)
+            {
+                L.e("request failure", t);
+                if (callback != null) callback.onFailure(new EssenceException(t));
+            }
+        });
+    }
 }

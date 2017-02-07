@@ -34,4 +34,15 @@ public interface GankService
      */
     @GET (ApiPath.PATH_DAY)
     Observable<DayType> day(@Path("year") int year, @Path("month") int month, @Path("day") int day);
+
+    /**
+     * 搜索
+     * @param keyword
+     * @param category
+     * @param count
+     * @param page
+     * @return
+     */
+    @GET (ApiPath.PATH_SEARCH)
+    Observable<ListSimple<Essence>> search(@Path("keyword") String keyword, @Path("category") String category, @Path("count") int count, @Path("page") int page);
 }
