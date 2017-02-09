@@ -1,15 +1,14 @@
 package com.xinzy.essence.widget;
 
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Rect;
-import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.View;
+
+import com.xinzy.essence.widget.decoration.DecorationEntrust;
 
 /**
  * Created by Xinzy on 2017-01-18.
@@ -58,79 +57,52 @@ public class InternalRecyclerView extends RecyclerView
             }
         }
 
-        public void onScrollToTop(RecyclerView view, int state) {}
-
-        public void onScrollToBottom(RecyclerView view, int state) {}
-    }
-
-    public static class LinearItemDecoration extends ItemDecoration
-    {
-        private int mOrientation;
-        private Drawable mDivider;
-
-        private static final int[] ATTRS = {android.R.attr.listDivider};
-
-        public LinearItemDecoration(Context context, int orientation)
+        public void onScrollToTop(RecyclerView view, int state)
         {
-            setOrientation(orientation);
-            final TypedArray ta = context.obtainStyledAttributes(ATTRS);
-            this.mDivider = ta.getDrawable(0);
-            ta.recycle();
         }
 
-        public void setOrientation(int orientation)
+        public void onScrollToBottom(RecyclerView view, int state)
         {
-            if (orientation != LinearLayoutManager.VERTICAL && orientation != LinearLayoutManager.HORIZONTAL)
-            {
-                throw new IllegalArgumentException("Wrong Argument orientation");
-            }
-            this.mOrientation = orientation;
+        }
+    }
+
+    public static class SpacesItemDecoration extends ItemDecoration
+    {
+        private DecorationEntrust mEntrust;
+        private int mColor;
+        private int leftRight;
+        private int topBottom;
+
+        public SpacesItemDecoration(int leftRight, int topBottom)
+        {
+            this(leftRight, topBottom, 0);
+        }
+
+        public SpacesItemDecoration(int leftRight, int topBottom, int mColor)
+        {
+            this.leftRight = leftRight;
+            this.topBottom = topBottom;
+            this.mColor = mColor;
         }
 
         @Override
         public void onDraw(Canvas c, RecyclerView parent, State state)
         {
-            if (mOrientation == LinearLayoutManager.VERTICAL)
+            if (mEntrust == null)
             {
-                int left = parent.getPaddingLeft() + parent.getPaddingStart();
-                int right = parent.getRight() - parent.getPaddingEnd() - parent.getPaddingRight();
-
-                final int childrenCount = parent.getChildCount();
-                for (int i = 0; i < childrenCount; i++)
-                {
-                    View child = parent.getChildAt(i);
-                    LayoutParams lp = (LayoutParams) child.getLayoutParams();
-                    int top = child.getBottom() + lp.bottomMargin;
-                    int bottom = top + mDivider.getMinimumHeight();
-                    mDivider.setBounds(left, top, right, bottom);
-                    mDivider.draw(c);
-                }
-            } else
-            {
-                int top = parent.getPaddingTop();
-                int bottom = parent.getHeight() - parent.getPaddingBottom();
-                final int childCount = parent.getChildCount();
-                for (int i = 0; i < childCount; i++){
-                    View child = parent.getChildAt(i);
-                    LayoutParams params = (LayoutParams)child.getLayoutParams();
-                    int left = child.getRight() + params.rightMargin;
-                    int right = left + mDivider.getIntrinsicWidth();
-                    mDivider.setBounds(left, top, right, bottom);
-                    mDivider.draw(c);
-                }
+                mEntrust = DecorationEntrust.get(parent.getLayoutManager(), leftRight, topBottom, mColor);
             }
+            mEntrust.onDraw(c, parent, state);
         }
 
         @Override
         public void getItemOffsets(Rect outRect, View view, RecyclerView parent, State state)
         {
-            if (mOrientation == LinearLayoutManager.VERTICAL)
+            if (mEntrust == null)
             {
-                outRect.set(0, 0, mDivider.getMinimumHeight(), 0);
-            } else
-            {
-                outRect.set(0, 0, 0, mDivider.getMinimumWidth());
+                mEntrust = DecorationEntrust.get(parent.getLayoutManager(), leftRight, topBottom, mColor);
             }
+            mEntrust.getItemOffsets(outRect, view, parent, state);
         }
     }
 }

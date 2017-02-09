@@ -4,10 +4,12 @@ import android.Manifest;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -50,6 +52,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private InternalRecyclerView mRecycleView;
     private BeautyAdapter mAdapter;
     private MainPresenter mPresenter;
+
+    private long mLastBackTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -125,7 +129,15 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             drawer.closeDrawer(GravityCompat.START);
         } else
         {
-            super.onBackPressed();
+            long time = SystemClock.uptimeMillis();
+            if (time - mLastBackTime < 2000)
+            {
+                super.onBackPressed();
+            } else
+            {
+                mLastBackTime = time;
+                Snackbar.make(mRecycleView, R.string.pressToExit, Snackbar.LENGTH_LONG).show();
+            }
         }
     }
 

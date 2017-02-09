@@ -33,12 +33,12 @@
             android:name=".activity.CategoryActivity"
             android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
             android:label="@string/titleActivityCategory"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar.AppCompat"/>
         <activity
             android:name=".activity.WebViewActivity"
             android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
             android:label="@string/titleActivityWebView"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar.AppCompat"/>
         <activity
             android:name=".activity.DayActivity"
             android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
