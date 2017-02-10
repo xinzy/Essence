@@ -9,6 +9,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
 import android.view.View;
@@ -55,6 +56,10 @@ public class SearchActivity extends BaseActivity implements com.xinzy.essence.vi
         setContentView(R.layout.activity_search);
 
         mSearchView = (SearchView) findViewById(R.id.searchView);
+//        mSearchView.setIconifiedByDefault(true);
+//        mSearchView.setFocusable(true);
+//        mSearchView.setFocusableInTouchMode(true);
+//        mSearchView.requestFocusFromTouch();
         SearchManager manager = (SearchManager) getSystemService(SEARCH_SERVICE);
         mSearchView.setSearchableInfo(manager.getSearchableInfo(getComponentName()));
         mSearchView.setOnQueryTextListener(this);
@@ -63,6 +68,17 @@ public class SearchActivity extends BaseActivity implements com.xinzy.essence.vi
         mRefreshLayout.setEnabled(false);
 
         mRecyclerView = (InternalRecyclerView) findViewById(R.id.searchRecyclerView);
+        mRecyclerView.addOnScrollListener(new InternalRecyclerView.InternalScrollListener()
+        {
+            @Override
+            public void onScrollToBottom(RecyclerView view, int state)
+            {
+                if (state == RecyclerView.SCROLL_STATE_IDLE)
+                {
+                    mSearchPresenter.loadMore();
+                }
+            }
+        });
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         mAdapter = new MultiTypeAdapter();
         DayProviders.EssenceProvider essenceProvider = new DayProviders.EssenceProvider();
@@ -100,7 +116,6 @@ public class SearchActivity extends BaseActivity implements com.xinzy.essence.vi
 
     private void query(String text)
     {
-        L.d("query " + text);
         mSearchPresenter.cancel();
         if (TextUtils.isEmpty(text))
         {
@@ -128,14 +143,14 @@ public class SearchActivity extends BaseActivity implements com.xinzy.essence.vi
     }
 
     @Override
-    public void setData(List<Essence> data, boolean isAppend)
+    public void setData(List<Essence> data, boolean isRefresh)
     {
-        if (isAppend)
-        {
-            mAdapter.addAll(data);
-        } else
+        if (isRefresh)
         {
             mAdapter.replace(data);
+        } else
+        {
+            mAdapter.addAll(data);
         }
     }
 

@@ -12,7 +12,7 @@ import java.util.List;
  */
 public interface SearchView extends BaseView<SearchPresenter>
 {
-    void setData(List<Essence> data, boolean isAppend);
+    void setData(List<Essence> data, boolean isRefresh);
 
     void showLoading(boolean isLoading);
 }

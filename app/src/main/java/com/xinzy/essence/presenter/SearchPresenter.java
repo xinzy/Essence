@@ -10,5 +10,7 @@ public interface SearchPresenter extends BasePresenter
 {
     void search(String keyword, String category);
 
+    void loadMore();
+
     void cancel();
 }

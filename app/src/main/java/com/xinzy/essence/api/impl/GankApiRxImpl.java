@@ -1,6 +1,7 @@
 package com.xinzy.essence.api.impl;
 
 import android.support.annotation.Nullable;
+import android.support.v4.util.ArrayMap;
 
 import com.xinzy.essence.api.ApiCallback;
 import com.xinzy.essence.api.GankApi;
@@ -13,6 +14,7 @@ import com.xinzy.essence.util.EssenceException;
 import com.xinzy.essence.util.L;
 
 import java.util.List;
+import java.util.Map;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -122,39 +124,69 @@ public class GankApiRxImpl implements GankApi
                 }
             }
         });
+        RxApiManager.getInstance().add(keyword, subscription);
     }
 
     @Override
     public void cancelSearch(String tag)
     {
-
+        RxApiManager.getInstance().cancel(tag);
     }
 
-    private static class RetrofitApiManager implements ApiManager<Subscription>
+    private static class RxApiManager implements ApiManager<Subscription>
     {
+        private static RxApiManager sInstance;
+
+        private Map<String, Subscription> mSubscriptions;
+
+        static RxApiManager getInstance()
+        {
+            if (sInstance == null)
+            {
+                synchronized (RxApiManager.class)
+                {
+                    if (sInstance == null)
+                    {
+                        sInstance = new RxApiManager();
+                    }
+                }
+            }
+
+            return sInstance;
+        }
+
+        private RxApiManager()
+        {
+            mSubscriptions = new ArrayMap<>();
+        }
 
         @Override
         public void add(String tag, Subscription subscription)
         {
-
+            mSubscriptions.put(tag, subscription);
         }
 
         @Override
         public void cancel(String tag)
         {
-
+            final Subscription subscription = mSubscriptions.get(tag);
+            if (subscription != null)
+            {
+                subscription.unsubscribe();
+                remove(tag);
+            }
         }
 
         @Override
         public void remove(String tag)
         {
-
+            mSubscriptions.remove(tag);
         }
 
         @Override
         public void clear()
         {
-
+            mSubscriptions.clear();
         }
     }
 }
