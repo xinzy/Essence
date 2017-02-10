@@ -203,6 +203,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             case R.id.action_search:
                 SearchActivity.start(this, mAppBar);
                 return true;
+            case R.id.action_about:
+                AboutActivity.start(this);
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }

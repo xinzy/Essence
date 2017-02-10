@@ -17,4 +17,17 @@ public interface GankApi
     void day(int year, int month, int day, @Nullable ApiCallback<DayType> callback);
 
     void search(String keyword, String category, int count, int page, @Nullable ApiCallback<List<Essence>> callback);
+
+    void cancelSearch(String tag);
+
+    interface ApiManager<T>
+    {
+        void add(String tag, T t);
+
+        void cancel(String tag);
+
+        void remove(String tag);
+
+        void clear();
+    }
 }

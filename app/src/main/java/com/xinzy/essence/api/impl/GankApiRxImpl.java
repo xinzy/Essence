@@ -16,6 +16,7 @@ import java.util.List;
 
 import rx.Observable;
 import rx.Subscriber;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -96,7 +97,7 @@ public class GankApiRxImpl implements GankApi
         GankService service = HttpUtil.getRxRetrofitInstance().create(GankService.class);
         Observable<ListSimple<Essence>> observable = service.search(keyword, category, count, page);
         if (callback != null) callback.onStart();
-        observable.subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<ListSimple<Essence>>()
+        Subscription subscription = observable.subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<ListSimple<Essence>>()
         {
             @Override
             public void onCompleted() {}
@@ -121,5 +122,39 @@ public class GankApiRxImpl implements GankApi
                 }
             }
         });
+    }
+
+    @Override
+    public void cancelSearch(String tag)
+    {
+
+    }
+
+    private static class RetrofitApiManager implements ApiManager<Subscription>
+    {
+
+        @Override
+        public void add(String tag, Subscription subscription)
+        {
+
+        }
+
+        @Override
+        public void cancel(String tag)
+        {
+
+        }
+
+        @Override
+        public void remove(String tag)
+        {
+
+        }
+
+        @Override
+        public void clear()
+        {
+
+        }
     }
 }

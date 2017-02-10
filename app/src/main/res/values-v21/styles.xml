@@ -7,7 +7,7 @@
         <item name="android:statusBarColor">@color/transparent</item>
     </style>
 
-    <style name="AppTheme.NoActionBar.AppCompat" parent="AppTheme.NoActionBar">
+    <style name="AppTheme.AppCompat.NoActionBar" parent="AppTheme.NoActionBar">
         <item name="android:statusBarColor">@color/colorPrimaryDark</item>
     </style>
 </resources>

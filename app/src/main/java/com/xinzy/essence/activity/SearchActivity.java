@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
@@ -31,6 +32,7 @@ import java.util.List;
 public class SearchActivity extends BaseActivity implements com.xinzy.essence.view.SearchView, OnViewEventListener, SearchView.OnQueryTextListener
 {
     private SearchView mSearchView;
+    private SwipeRefreshLayout mRefreshLayout;
     private InternalRecyclerView mRecyclerView;
     private MultiTypeAdapter mAdapter;
 
@@ -56,6 +58,9 @@ public class SearchActivity extends BaseActivity implements com.xinzy.essence.vi
         SearchManager manager = (SearchManager) getSystemService(SEARCH_SERVICE);
         mSearchView.setSearchableInfo(manager.getSearchableInfo(getComponentName()));
         mSearchView.setOnQueryTextListener(this);
+
+        mRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.searchRefreshLayout);
+        mRefreshLayout.setEnabled(false);
 
         mRecyclerView = (InternalRecyclerView) findViewById(R.id.searchRecyclerView);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
@@ -114,6 +119,12 @@ public class SearchActivity extends BaseActivity implements com.xinzy.essence.vi
             Essence essence = (Essence) Preconditions.checkNotNull(args[0]);
             WebViewActivity.start(this, essence.getUrl());
         }
+    }
+
+    @Override
+    public void showLoading(boolean isLoading)
+    {
+        mRefreshLayout.setRefreshing(isLoading);
     }
 
     @Override
