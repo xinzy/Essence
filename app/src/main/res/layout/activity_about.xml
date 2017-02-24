@@ -8,6 +8,7 @@
     android:background="@color/translucence"
     android:orientation="vertical"
     android:gravity="center"
+    android:onClick="onContainerClicked"
     tools:context="com.xinzy.essence.activity.AboutActivity">
 
     <TextView
@@ -23,6 +24,7 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:padding="24dp"
+        android:autoLink="all"
         android:text="@string/aboutContent"
         android:textSize="18sp"
         android:textColor="@color/white"/>
@@ -31,6 +33,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
+        android:autoLink="email"
         android:text="@string/aboutEmail"
         android:textSize="18sp"
         android:textColor="@color/colorAccent"/>

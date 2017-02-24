@@ -12,16 +12,19 @@ import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 
 import com.xinzy.essence.R;
@@ -44,8 +47,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final String DEFAULT_CATEGORY = Macro.EXT_CATEGORY[0];
     private static final int REQUEST_CODE_WRITE_EXTERNAL_STORAGE = 627;
-
-    private static final int MENU_FIRST = View.generateViewId();
 
     private AppBarLayout mAppBar;
     private SwipeRefreshLayout mRefreshLayout;
@@ -82,10 +83,19 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        for (int i = 0; i < Macro.CATEGORYS.length; i++)
+        navigationView.inflateMenu(R.menu.menu_main_nav);
+        SwitchCompat themeSwicher = (SwitchCompat) MenuItemCompat.getActionView(navigationView.getMenu().findItem(R.id.menuTheme))
+                .findViewById(R.id.viewSwitch);
+        themeSwicher.setChecked(isNightMode());
+        themeSwicher.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
         {
-            navigationView.getMenu().add(0, MENU_FIRST + i, 0, Macro.CATEGORYS[i]);
-        }
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+            {
+                setNightMode(isChecked);
+                recreate();
+            }
+        });
 
         mRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
         mRefreshLayout.setOnRefreshListener(this);
@@ -178,10 +188,15 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     @Override
-    public boolean onNavigationItemSelected(MenuItem item)
+    public boolean onNavigationItemSelected(@NonNull MenuItem item)
     {
-        int id = item.getItemId();
-        CategoryActivity.start(this, Macro.CATEGORYS[id - MENU_FIRST]);
+        if (item.getItemId() == R.id.menuTheme)
+        {
+            L.e("Change theme");
+            return true;
+        }
+
+        CategoryActivity.start(this, item.getTitle().toString());
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

@@ -3,6 +3,7 @@ package com.xinzy.essence.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import com.xinzy.essence.R;
 import com.xinzy.essence.base.BaseActivity;
@@ -21,5 +22,10 @@ public class AboutActivity extends BaseActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
+    }
+
+    public void onContainerClicked(View v)
+    {
+        finish();
     }
 }

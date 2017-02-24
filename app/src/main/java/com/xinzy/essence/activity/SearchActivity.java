@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -21,7 +22,6 @@ import com.xinzy.essence.base.BaseActivity;
 import com.xinzy.essence.model.Essence;
 import com.xinzy.essence.presenter.SearchPresenter;
 import com.xinzy.essence.presenter.impl.SearchPresenterImpl;
-import com.xinzy.essence.util.L;
 import com.xinzy.essence.util.Macro;
 import com.xinzy.essence.util.Preconditions;
 import com.xinzy.essence.widget.InternalRecyclerView;
@@ -56,10 +56,6 @@ public class SearchActivity extends BaseActivity implements com.xinzy.essence.vi
         setContentView(R.layout.activity_search);
 
         mSearchView = (SearchView) findViewById(R.id.searchView);
-//        mSearchView.setIconifiedByDefault(true);
-//        mSearchView.setFocusable(true);
-//        mSearchView.setFocusableInTouchMode(true);
-//        mSearchView.requestFocusFromTouch();
         SearchManager manager = (SearchManager) getSystemService(SEARCH_SERVICE);
         mSearchView.setSearchableInfo(manager.getSearchableInfo(getComponentName()));
         mSearchView.setOnQueryTextListener(this);
@@ -68,6 +64,8 @@ public class SearchActivity extends BaseActivity implements com.xinzy.essence.vi
         mRefreshLayout.setEnabled(false);
 
         mRecyclerView = (InternalRecyclerView) findViewById(R.id.searchRecyclerView);
+        int divideColor = ResourcesCompat.getColor(getResources(), R.color.colorDivide, getTheme());
+        mRecyclerView.addItemDecoration(new InternalRecyclerView.SpacesItemDecoration(0, 2, divideColor));
         mRecyclerView.addOnScrollListener(new InternalRecyclerView.InternalScrollListener()
         {
             @Override

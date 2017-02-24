@@ -15,15 +15,16 @@
         android:adjustViewBounds="true"
         android:contentDescription="@null"
         android:transitionName="@string/imageTransitionName"
-        tools:src="@drawable/ic_menu_gallery"/>
+        tools:src="@drawable/img_default"/>
 
     <TextView
         android:id="@+id/itemTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/item_bg"
         android:gravity="center"
         android:padding="8dp"
-        android:textColor="#666"
+        android:textColor="@color/textColorPrimary"
         android:textSize="14sp"
         tools:text="测试文字啦啦啦啦"/>
 </LinearLayout>

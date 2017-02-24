@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -60,6 +61,8 @@ public class DayActivity extends AppCompatActivity implements SwipeRefreshLayout
         InternalRecyclerView recyclerView = (InternalRecyclerView) findViewById(R.id.dayRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         recyclerView.setHasFixedSize(false);
+        int divideColor = ResourcesCompat.getColor(getResources(), R.color.colorDivide, getTheme());
+        recyclerView.addItemDecoration(new InternalRecyclerView.SpacesItemDecoration(0, 2, divideColor));
 
         DayProviders.CategoryProvider categoryProvider = new DayProviders.CategoryProvider();
         DayProviders.EssenceProvider titleProvider = new DayProviders.EssenceProvider();

@@ -35,10 +35,10 @@ public class Macro
     /**
      * 支持分类
      */
-    public static final String[] CATEGORYS = {"All", "Android", "iOS", "拓展资源", "前端", "瞎推荐", "App"};
+    public static final String[] CATEGORYS = {"Android", "iOS", "拓展资源", "前端", "瞎推荐", "App"};
 
     /**
      * 扩展分类
      */
-    public static final String[] EXT_CATEGORY = {"福利", "休息视频"};
+    public static final String[] EXT_CATEGORY = {"福利", "休息视频", "All", };
 }

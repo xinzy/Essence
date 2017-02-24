@@ -8,4 +8,17 @@
     <color name="translucence">#60000000</color>
     <color name="white">#FFFFFF</color>
     <color name="colorPressed">#CFD8DC</color>
+
+    <color name="itemTitleBackground">#F0F0F0</color>
+    <color name="itemBackground">#FFFFFF</color>
+    <color name="textColorPrimary">#666666</color>
+    <color name="textColorMinor">#999999</color>
+    <color name="textColorTitle">#545454</color>
+    <color name="colorDivide">#F0F0F0</color>
+    <color name="colorNavBarStart">#81C784</color>
+    <color name="colorNavBarMiddle">#4CAF50</color>
+    <color name="colorNavBarEnd">#2E7D32</color>
+    <color name="imageBackgroud">#C9C9C9</color>
+    <color name="colorPopupOverlay">#E0E0E0</color>
+    <color name="colorPopupOverlayText">#666666</color>
 </resources>
