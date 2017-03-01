@@ -59,6 +59,11 @@
         <activity
             android:name=".activity.AboutActivity"
             android:theme="@style/AppTheme.AppCompat.Transparent"/>
+        <activity
+            android:name=".activity.ScrollingActivity"
+            android:label="@string/title_activity_scrolling"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
     </application>
 
 </manifest>

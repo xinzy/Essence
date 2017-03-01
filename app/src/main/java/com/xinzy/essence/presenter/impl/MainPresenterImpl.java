@@ -13,7 +13,6 @@ import com.xinzy.essence.util.Macro;
 import com.xinzy.essence.util.Preconditions;
 import com.xinzy.essence.view.MainView;
 
-import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -80,8 +79,6 @@ public class MainPresenterImpl implements MainPresenter
     @Override
     public void onTextClick(Essence essence)
     {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(essence.getCreatedAt());
-        mMainView.enter(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH));
+        mMainView.enter(essence);
     }
 }

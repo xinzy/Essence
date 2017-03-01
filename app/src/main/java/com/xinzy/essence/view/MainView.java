@@ -20,9 +20,9 @@ public interface MainView extends BaseView<MainPresenter>
 
     void setData(List<Essence> data, boolean refresh);
 
-    void enter(int year, int month, int day);
+    void enter(Essence essence);
 
-    public interface OnItemClickListener
+    interface OnItemClickListener
     {
         void onImageClick(ImageView img, Essence essence);
 

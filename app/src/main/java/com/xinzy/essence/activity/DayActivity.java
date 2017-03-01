@@ -11,7 +11,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 
+import com.squareup.picasso.Picasso;
 import com.xinzy.essence.R;
 import com.xinzy.essence.adapter.DayProviders;
 import com.xinzy.essence.adapter.holder.EssenceHolder;
@@ -28,21 +30,17 @@ import com.xinzy.essence.widget.adapter.MultiTypeAdapter;
 public class DayActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener, DayView,
         OnViewEventListener
 {
-    private static final String KEY_YEAR = "YEAR";
-    private static final String KEY_MONTH = "MONTH";
-    private static final String KEY_DAY = "DAY";
+    private static final String KEY_ESSENCE = "ESSENCE";
     
     private SwipeRefreshLayout mRefreshLayout;
     private MultiTypeAdapter mAdapter;
 
     private DayPresenter mDayPresenter;
     
-    public static void start(Context context, int year, int month, int day)
+    public static void start(Context context, Essence essence)
     {
         Intent starter = new Intent(context, DayActivity.class);
-        starter.putExtra(KEY_YEAR, year);
-        starter.putExtra(KEY_MONTH, month);
-        starter.putExtra(KEY_DAY, day);
+        starter.putExtra(KEY_ESSENCE, essence);
         context.startActivity(starter);
     }
 
@@ -52,6 +50,7 @@ public class DayActivity extends AppCompatActivity implements SwipeRefreshLayout
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_day);
 
+        ImageView topImageView = (ImageView) findViewById(R.id.dayImage);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -72,11 +71,10 @@ public class DayActivity extends AppCompatActivity implements SwipeRefreshLayout
         recyclerView.setAdapter(mAdapter);
 
         Intent intent = getIntent();
-        int year = intent.getIntExtra(KEY_YEAR, 0);
-        int month = intent.getIntExtra(KEY_MONTH, 0);
-        int day = intent.getIntExtra(KEY_DAY, 0);
+        Essence essence = intent.getParcelableExtra(KEY_ESSENCE);
+        Picasso.with(this).load(essence.getUrl()).into(topImageView);
 
-        mDayPresenter = new DayPresenterImpl(this, year, month, day);
+        mDayPresenter = new DayPresenterImpl(this, essence);
         mDayPresenter.start();
     }
 

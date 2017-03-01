@@ -62,15 +62,14 @@ public class WebViewActivity extends BaseActivity implements NestedScrollView.On
 
         String url = getIntent().getStringExtra(KEY_URL);
         mWebView.loadUrl(url);
+        if (isNightMode()) mWebView.setNightMode(getClassLoader());
     }
 
     @Override
     protected void onDestroy()
     {
         super.onDestroy();
-        mWebView.clearHistory();
-        mWebView.removeAllViews();
-        mWebView.destroy();
+        mWebView.onDestory();
     }
 
     @Override

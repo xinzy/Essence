@@ -267,9 +267,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     @Override
-    public void enter(int year, int month, int day)
+    public void enter(Essence essence)
     {
-        DayActivity.start(this, year, month, day);
+        L.e("data = " + essence);
+        DayActivity.start(this, essence);
     }
 
     @Override
