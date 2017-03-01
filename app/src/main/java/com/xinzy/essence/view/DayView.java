@@ -9,6 +9,8 @@ import com.xinzy.essence.presenter.DayPresenter;
  */
 public interface DayView extends BaseView<DayPresenter>
 {
+    void showTitle(String title);
+
     void showRefresh();
 
     void hideRefresh();

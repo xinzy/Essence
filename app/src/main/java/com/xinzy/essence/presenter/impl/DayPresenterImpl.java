@@ -34,6 +34,7 @@ public class DayPresenterImpl implements DayPresenter
         day = calendar.get(Calendar.DAY_OF_MONTH);
 
         mGankApi = new GankApiRetrofitImpl();
+        mView.showTitle(new StringBuffer().append("干货").append(year).append('-').append(month).append('-').append(day).toString());
     }
 
     @Override

@@ -96,6 +96,12 @@ public class DayActivity extends AppCompatActivity implements SwipeRefreshLayout
     }
 
     @Override
+    public void showTitle(String title)
+    {
+        setTitle(title);
+    }
+
+    @Override
     public void showRefresh()
     {
         if (! mRefreshLayout.isRefreshing()) mRefreshLayout.setRefreshing(true);
