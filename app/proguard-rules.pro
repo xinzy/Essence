@@ -39,7 +39,7 @@
     public static ** valueOf(java.lang.String);
 }
 -keep class * implements android.os.Parcelable {                                # 保持 Parcelable 不被混淆
-  public static final android.os.Parcelable$Creator *;
+    public static final android.os.Parcelable$Creator *;
 }
 
 -dontwarn okhttp3.**
@@ -50,17 +50,19 @@
 # RxAndroid
 -dontwarn sun.misc.**
 -keepclassmembers class rx.internal.util.unsafe.*ArrayQueue*Field* {
- long producerIndex;
- long consumerIndex;
+    long producerIndex;
+    long consumerIndex;
 }
 -keepclassmembers class rx.internal.util.unsafe.BaseLinkedQueueProducerNodeRef {
- rx.internal.util.atomic.LinkedQueueNode producerNode;
+    rx.internal.util.atomic.LinkedQueueNode producerNode;
 }
 -keepclassmembers class rx.internal.util.unsafe.BaseLinkedQueueConsumerNodeRef {
- rx.internal.util.atomic.LinkedQueueNode consumerNode;
+    rx.internal.util.atomic.LinkedQueueNode consumerNode;
 }
 
 # Model 类
--keep class com.xinzy.essence.model.** {
-    *;
-}
+-keep class com.xinzy.essence.model.** { *; }
+
+# ARouter
+-keep public class com.alibaba.android.arouter.routes.**{*;}
+-keep class * implements com.alibaba.android.arouter.facade.template.ISyringe{*;}

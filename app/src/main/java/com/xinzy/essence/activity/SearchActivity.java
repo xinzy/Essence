@@ -15,6 +15,7 @@ import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
 import android.view.View;
 
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.xinzy.essence.R;
 import com.xinzy.essence.adapter.DayProviders;
 import com.xinzy.essence.adapter.holder.EssenceHolder;
@@ -24,6 +25,7 @@ import com.xinzy.essence.presenter.SearchPresenter;
 import com.xinzy.essence.presenter.impl.SearchPresenterImpl;
 import com.xinzy.essence.util.Macro;
 import com.xinzy.essence.util.Preconditions;
+import com.xinzy.essence.router.RouterPath;
 import com.xinzy.essence.widget.InternalRecyclerView;
 import com.xinzy.essence.widget.OnViewEventListener;
 import com.xinzy.essence.widget.adapter.MultiTypeAdapter;
@@ -130,7 +132,7 @@ public class SearchActivity extends BaseActivity implements com.xinzy.essence.vi
         if (event == EssenceHolder.EVENT_CONTAINER_CLICKED && args != null)
         {
             Essence essence = (Essence) Preconditions.checkNotNull(args[0]);
-            WebViewActivity.start(this, essence.getUrl());
+            ARouter.getInstance().build(RouterPath.ROUTER_WEBVIEW).withString(WebViewActivity.KEY_URL, essence.getUrl()).navigation();
         }
     }
 

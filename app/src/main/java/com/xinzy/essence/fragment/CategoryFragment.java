@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.xinzy.essence.R;
 import com.xinzy.essence.activity.WebViewActivity;
 import com.xinzy.essence.adapter.DayProviders;
@@ -21,6 +22,7 @@ import com.xinzy.essence.model.Essence;
 import com.xinzy.essence.presenter.CategoryPresenter;
 import com.xinzy.essence.presenter.impl.CategoryPresenterImpl;
 import com.xinzy.essence.util.L;
+import com.xinzy.essence.router.RouterPath;
 import com.xinzy.essence.view.CategoryView;
 import com.xinzy.essence.widget.InternalRecyclerView;
 import com.xinzy.essence.widget.OnViewEventListener;
@@ -146,7 +148,7 @@ public class CategoryFragment extends BaseFragment implements CategoryView, Swip
             assert args != null && args[0] != null;
             Essence essence = (Essence) args[0];
             L.v("on item click " + essence);
-            WebViewActivity.start(getContext(), essence.getUrl());
+            ARouter.getInstance().build(RouterPath.ROUTER_WEBVIEW).withString(WebViewActivity.KEY_URL, essence.getUrl()).navigation();
         }
     }
 

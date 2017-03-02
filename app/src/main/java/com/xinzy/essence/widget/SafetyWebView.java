@@ -8,8 +8,6 @@ import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 
-import java.lang.reflect.Method;
-
 /**
  * Created by Xinzy on 2017-01-18.
  */
@@ -57,20 +55,6 @@ public class SafetyWebView extends WebView
         removeJavascriptInterface("searchBoxJavaBridge_");
         removeJavascriptInterface("accessibility");
         removeJavascriptInterface("accessibilityTraversal");
-    }
-
-    public void setNightMode(ClassLoader loader)
-    {
-        try
-        {
-            Class cls = loader.loadClass("android.webkit.WebSettingsClassic");
-            Method md = cls.getMethod("setProperty", String.class, String.class);
-            md.invoke(getSettings(), "inverted", "true");
-            md.invoke(getSettings(), "inverted_contrast", "1");
-        } catch (Exception e)
-        {
-            e.printStackTrace();
-        }
     }
 
     @Override

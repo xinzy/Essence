@@ -1,6 +1,5 @@
 package com.xinzy.essence.activity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,6 +12,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.squareup.picasso.Picasso;
 import com.xinzy.essence.R;
 import com.xinzy.essence.adapter.DayProviders;
@@ -21,29 +22,24 @@ import com.xinzy.essence.model.DayType;
 import com.xinzy.essence.model.Essence;
 import com.xinzy.essence.presenter.DayPresenter;
 import com.xinzy.essence.presenter.impl.DayPresenterImpl;
+import com.xinzy.essence.router.RouterPath;
 import com.xinzy.essence.util.Preconditions;
 import com.xinzy.essence.view.DayView;
 import com.xinzy.essence.widget.InternalRecyclerView;
 import com.xinzy.essence.widget.OnViewEventListener;
 import com.xinzy.essence.widget.adapter.MultiTypeAdapter;
 
+@Route(path = RouterPath.ROUTER_DAY)
 public class DayActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener, DayView,
-        OnViewEventListener, View.OnClickListener
+        OnViewEventListener
 {
-    private static final String KEY_ESSENCE = "ESSENCE";
+    public static final String KEY_ESSENCE = "ESSENCE";
     
     private SwipeRefreshLayout mRefreshLayout;
     private MultiTypeAdapter mAdapter;
 
     private DayPresenter mDayPresenter;
     private Essence mDayEssence;
-    
-    public static void start(Context context, Essence essence)
-    {
-        Intent starter = new Intent(context, DayActivity.class);
-        starter.putExtra(KEY_ESSENCE, essence);
-        context.startActivity(starter);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -52,7 +48,6 @@ public class DayActivity extends AppCompatActivity implements SwipeRefreshLayout
         setContentView(R.layout.activity_day);
 
         ImageView topImageView = (ImageView) findViewById(R.id.dayImage);
-        topImageView.setOnClickListener(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -89,17 +84,6 @@ public class DayActivity extends AppCompatActivity implements SwipeRefreshLayout
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onClick(View v)
-    {
-        switch (v.getId())
-        {
-        case R.id.dayImage:
-            ImageActivity.start(this, v, mDayEssence.getUrl());
-            break;
-        }
     }
 
     @Override
@@ -143,7 +127,7 @@ public class DayActivity extends AppCompatActivity implements SwipeRefreshLayout
         if (event == EssenceHolder.EVENT_CONTAINER_CLICKED && args != null)
         {
             Essence essence = (Essence) Preconditions.checkNotNull(args[0]);
-            WebViewActivity.start(this, essence.getUrl());
+            ARouter.getInstance().build(RouterPath.ROUTER_WEBVIEW).withString(WebViewActivity.KEY_URL, essence.getUrl()).navigation();
         }
     }
 }

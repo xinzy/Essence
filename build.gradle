@@ -53,6 +53,10 @@ ext {
             stethoOkhttp: 'com.facebook.stetho:stetho-okhttp3:1.4.2',
 
             rxAndroid: 'io.reactivex:rxandroid:1.2.1',
-            rxJava: 'io.reactivex:rxjava:1.1.6'
+            rxJava: 'io.reactivex:rxjava:1.1.6',
+
+            // ARouter
+            arouterApi: 'com.alibaba:arouter-api:1.0.7',
+            arouterCompiler: 'com.alibaba:arouter-compiler:1.0.3',
     ]
 }

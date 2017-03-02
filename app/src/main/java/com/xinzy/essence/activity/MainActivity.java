@@ -27,12 +27,14 @@ import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.xinzy.essence.R;
 import com.xinzy.essence.adapter.BeautyAdapter;
 import com.xinzy.essence.base.BaseActivity;
 import com.xinzy.essence.model.Essence;
 import com.xinzy.essence.presenter.MainPresenter;
 import com.xinzy.essence.presenter.impl.MainPresenterImpl;
+import com.xinzy.essence.router.RouterPath;
 import com.xinzy.essence.util.L;
 import com.xinzy.essence.util.Macro;
 import com.xinzy.essence.view.MainView;
@@ -195,8 +197,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             L.e("Change theme");
             return true;
         }
-
-        CategoryActivity.start(this, item.getTitle().toString());
+        ARouter.getInstance().build(RouterPath.ROUTER_CATEGORY).withString(CategoryActivity.KEY_CATEGORY, item.getTitle().toString()).navigation();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -219,7 +220,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 SearchActivity.start(this, mAppBar);
                 return true;
             case R.id.action_about:
-                AboutActivity.start(this);
+                ARouter.getInstance().build(RouterPath.ROUTER_ABOUT).navigation();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -269,7 +270,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @Override
     public void enter(Essence essence)
     {
-        DayActivity.start(this, essence);
+        ARouter.getInstance().build(RouterPath.ROUTER_DAY).withParcelable(DayActivity.KEY_ESSENCE, essence).navigation();
     }
 
     @Override

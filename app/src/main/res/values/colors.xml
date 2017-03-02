@@ -18,7 +18,7 @@
     <color name="colorNavBarStart">#81C784</color>
     <color name="colorNavBarMiddle">#4CAF50</color>
     <color name="colorNavBarEnd">#2E7D32</color>
-    <color name="imageBackgroud">#C9C9C9</color>
+    <color name="imageBackground">#C9C9C9</color>
     <color name="colorPopupOverlay">#E0E0E0</color>
     <color name="colorPopupOverlayText">#666666</color>
 </resources>

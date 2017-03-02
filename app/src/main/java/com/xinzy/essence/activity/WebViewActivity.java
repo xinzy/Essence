@@ -1,7 +1,5 @@
 package com.xinzy.essence.activity;
 
-import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -16,13 +14,16 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
 import com.xinzy.essence.R;
 import com.xinzy.essence.base.BaseActivity;
+import com.xinzy.essence.router.RouterPath;
 import com.xinzy.essence.widget.SafetyWebView;
 
+@Route(path = RouterPath.ROUTER_WEBVIEW)
 public class WebViewActivity extends BaseActivity implements NestedScrollView.OnScrollChangeListener, View.OnClickListener
 {
-    private static final String KEY_URL = "URL";
+    public static final String KEY_URL = "URL";
 
     private SafetyWebView mWebView;
     private ProgressBar   mProgressBar;
@@ -33,13 +34,6 @@ public class WebViewActivity extends BaseActivity implements NestedScrollView.On
 
     private boolean isFabShow;
     private boolean isFabAniming;
-
-    public static void start(Context context, String url)
-    {
-        Intent starter = new Intent(context, WebViewActivity.class);
-        starter.putExtra(KEY_URL, url);
-        context.startActivity(starter);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -62,7 +56,6 @@ public class WebViewActivity extends BaseActivity implements NestedScrollView.On
 
         String url = getIntent().getStringExtra(KEY_URL);
         mWebView.loadUrl(url);
-        if (isNightMode()) mWebView.setNightMode(getClassLoader());
     }
 
     @Override

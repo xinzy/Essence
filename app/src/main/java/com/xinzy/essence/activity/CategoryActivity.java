@@ -1,7 +1,5 @@
 package com.xinzy.essence.activity;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -12,24 +10,20 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.ViewGroup;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
 import com.xinzy.essence.R;
 import com.xinzy.essence.base.BaseActivity;
 import com.xinzy.essence.fragment.CategoryFragment;
+import com.xinzy.essence.router.RouterPath;
 import com.xinzy.essence.util.Macro;
 
+@Route(path = RouterPath.ROUTER_CATEGORY)
 public class CategoryActivity extends BaseActivity
 {
-    private static final String KEY_CATEGORY = "CATEGORY";
+    public static final String KEY_CATEGORY = "CATEGORY";
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager            mViewPager;
-
-    public static void start(Context context, String category)
-    {
-        Intent starter = new Intent(context, CategoryActivity.class);
-        starter.putExtra(KEY_CATEGORY, category);
-        context.startActivity(starter);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
