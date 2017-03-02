@@ -28,7 +28,7 @@ import com.xinzy.essence.widget.OnViewEventListener;
 import com.xinzy.essence.widget.adapter.MultiTypeAdapter;
 
 public class DayActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener, DayView,
-        OnViewEventListener
+        OnViewEventListener, View.OnClickListener
 {
     private static final String KEY_ESSENCE = "ESSENCE";
     
@@ -36,6 +36,7 @@ public class DayActivity extends AppCompatActivity implements SwipeRefreshLayout
     private MultiTypeAdapter mAdapter;
 
     private DayPresenter mDayPresenter;
+    private Essence mDayEssence;
     
     public static void start(Context context, Essence essence)
     {
@@ -51,6 +52,7 @@ public class DayActivity extends AppCompatActivity implements SwipeRefreshLayout
         setContentView(R.layout.activity_day);
 
         ImageView topImageView = (ImageView) findViewById(R.id.dayImage);
+        topImageView.setOnClickListener(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -71,10 +73,10 @@ public class DayActivity extends AppCompatActivity implements SwipeRefreshLayout
         recyclerView.setAdapter(mAdapter);
 
         Intent intent = getIntent();
-        Essence essence = intent.getParcelableExtra(KEY_ESSENCE);
-        Picasso.with(this).load(essence.getUrl()).into(topImageView);
+        mDayEssence = intent.getParcelableExtra(KEY_ESSENCE);
+        Picasso.with(this).load(mDayEssence.getUrl()).into(topImageView);
 
-        mDayPresenter = new DayPresenterImpl(this, essence);
+        mDayPresenter = new DayPresenterImpl(this, mDayEssence);
         mDayPresenter.start();
     }
 
@@ -87,6 +89,17 @@ public class DayActivity extends AppCompatActivity implements SwipeRefreshLayout
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onClick(View v)
+    {
+        switch (v.getId())
+        {
+        case R.id.dayImage:
+            ImageActivity.start(this, v, mDayEssence.getUrl());
+            break;
+        }
     }
 
     @Override
