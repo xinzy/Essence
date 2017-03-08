@@ -6,11 +6,16 @@ android {
 
     defaultConfig {
         applicationId "com.xinzy.essence"
+
         minSdkVersion rootProject.ext.android.minSdkVersion
         targetSdkVersion rootProject.ext.android.targetSdkVersion
-        versionCode 2
-        versionName "1.1.0"
+
+        versionCode rootProject.ext.versionCode
+        versionName rootProject.ext.versionName
+
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        multiDexEnabled true
 
         javaCompileOptions {
             annotationProcessorOptions {
@@ -64,8 +69,73 @@ dependencies {
     compile rootProject.ext.dependencies.stethoOkhttp
 
     compile rootProject.ext.dependencies.rxAndroid
-    compile rootProject.ext.dependencies.rxJava
 
     compile rootProject.ext.dependencies.arouterApi
     annotationProcessor rootProject.ext.dependencies.arouterCompiler
+
+    provided rootProject.ext.dependencies.tinkerProdiver
+    compile rootProject.ext.dependencies.tinkerApi
+}
+
+android.applicationVariants.all { variant ->
+    def taskName = variant.name
+    def date = new Date().format("yyyyMMddHHmmss")
+
+    tasks.all {
+        if ("assemble${taskName.capitalize()}".equalsIgnoreCase(it.name)) {
+
+            it.doLast {
+                copy {
+                    def fileNamePrefix = "${project.name}-${variant.baseName}"
+                    def newFileNamePrefix = "${fileNamePrefix}" //"${fileNamePrefix}-${date}"
+
+                    def destPath = file("${buildDir}/${project.name}-${date}/${variant.flavorName}")
+                    from variant.outputs.outputFile
+                    into destPath
+                    rename { String fileName ->
+                        fileName.replace("${fileNamePrefix}.apk", "${newFileNamePrefix}.apk")
+                    }
+                }
+            }
+        }
+    }
+}
+
+/////////////////////////////////////////////////////////////////////////////////
+// Tinker Config
+/////////////////////////////////////////////////////////////////////////////////
+
+def isTinkerEnable() {
+    return hasProperty("TINKER_ENABLE") ? TINKER_ENABLE : rootProject.ext.tinker.tinkerEnable
+}
+
+def getTinkerId() {
+    return hasProperty("TINKER_ID") ? TINKER_ID : rootProject.ext.versionName
+}
+
+if (isTinkerEnable()) {
+    apply plugin: 'com.tencent.tinker.patch'
+
+    tinkerPatch {
+        oldApk = ''
+
+        ignoreWarning = false
+
+        useSign = true
+
+        tinkerEnable = isTinkerEnable()
+
+        buildConfig {
+            applyMapping = ''
+
+            applyResourceMapping = ''
+
+            tinkerId = rootProject.ext.versionName
+
+            println 'fuck tinkerId = ' + tinkerId
+
+            keepDexApply = false
+        }
+    }
+
 }
